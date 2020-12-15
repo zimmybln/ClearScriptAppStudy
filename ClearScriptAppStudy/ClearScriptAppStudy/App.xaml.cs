@@ -64,5 +64,15 @@ namespace ClearScriptAppStudy
         {
             base.Initialize();
         }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+
+            var settingsManager = new SettingsManager<ApplicationScript>("ClearScriptAppStudy.json");
+
+            settingsManager.SaveSettings(this.Container.Resolve<ScriptService>().Script);
+
+            base.OnExit(e);
+        }
     }
 }
