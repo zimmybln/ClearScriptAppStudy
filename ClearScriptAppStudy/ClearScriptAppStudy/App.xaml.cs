@@ -1,4 +1,9 @@
-﻿using Prism.Ioc;
+﻿using ClearScriptAppStudy.Components;
+using ClearScriptAppStudy.Dialogs;
+using ClearScriptAppStudy.Services;
+using ClearScriptAppStudy.Types;
+using ClearScriptAppStudy.ViewModels;
+using Prism.Ioc;
 using Prism.Unity;
 using System;
 using System.Collections.Generic;
@@ -18,11 +23,28 @@ namespace ClearScriptAppStudy
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            var settingsScript = new SettingsManager<ApplicationScript>("ClearScriptAppStudy.json");
+
+            this.Container.Resolve<ScriptService>().Script = settingsScript.LoadSettings();
+
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register(typeof(MainWindow));
+            containerRegistry.Register(typeof(MainWindow))
+                .Register(typeof(MainWindowViewModel));
+
+            // Dienste registrieren
+            containerRegistry.RegisterSingleton(typeof(ScriptService));
+
+            // Dialoge registrieren
+            containerRegistry
+                .RegisterDialog<ScriptDialogView, ScriptDialogViewModel>();
+
+            containerRegistry
+                .RegisterDialogWindow<DialogWindow>();
+
         }
 
         protected override Window CreateShell()
