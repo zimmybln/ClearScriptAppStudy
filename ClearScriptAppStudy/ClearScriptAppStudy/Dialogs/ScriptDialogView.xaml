@@ -5,14 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClearScriptAppStudy.Dialogs"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Width="800" Height="500">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="600" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="10" />
-            <RowDefinition Height="400" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
          <avalonEdit:TextEditor
@@ -26,8 +27,9 @@
                 FontSize="12pt"
                 ShowLineNumbers="True"/>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,20,0">
             <Button Margin="2" Width="80" Height="28" Content="OK" Command="{Binding DialogCommand}" CommandParameter="true"/>
+            <Button Margin="2" Width="80" Height="28" Content="Abbruch" Command="{Binding DialogCommand}" CommandParameter="false"/>
         </StackPanel>
     </Grid>
 </UserControl>

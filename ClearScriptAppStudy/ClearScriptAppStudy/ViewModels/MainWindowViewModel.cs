@@ -5,6 +5,7 @@ using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,6 +30,9 @@ namespace ClearScriptAppStudy.ViewModels
 
         public ICommand ShowScriptDialogCommand => 
             showScriptDialogCommand ??= new DelegateCommand(OnShowScriptDialog);
+
+
+        public ObservableCollection<OutputLine> Outputs => container.Resolve<ScriptService>().Outputs;
 
 
         private void OnShowScriptDialog()

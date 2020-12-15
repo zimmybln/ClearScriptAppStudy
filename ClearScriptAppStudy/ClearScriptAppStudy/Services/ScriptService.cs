@@ -1,9 +1,11 @@
 ﻿using ClearScriptAppStudy.Dialogs;
 using ClearScriptAppStudy.Types;
 using Microsoft.ClearScript.V8;
+using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -12,16 +14,23 @@ using System.Windows;
 
 namespace ClearScriptAppStudy.Services
 {
-    public class ScriptService : IDisposable
+    public class ScriptService : BindableBase, IDisposable
     {
         private readonly IDialogService dialogService;
         private ApplicationScript applicationScript = null;
         private V8ScriptEngine scriptEngine = null;
+        private ObservableCollection<OutputLine> outputs = new ObservableCollection<OutputLine>();
         private bool disposedValue;
 
         public ScriptService(IDialogService dialogService)
         {
             this.dialogService = dialogService;
+        }
+
+        public ObservableCollection<OutputLine> Outputs
+        {
+            get => outputs;
+            set => SetProperty(ref outputs, value); 
         }
 
         public ApplicationScript Script
@@ -44,7 +53,7 @@ namespace ClearScriptAppStudy.Services
 
                 try
                 {
-
+                    Outputs.Clear();
 
                     //scriptEngine.AddHostObject("Questions", questionDictionary);
                     scriptEngine.AddHostObject("Console", new ClearScriptAppStudy.ScriptObjects.Console(OnWriteLine));
@@ -87,9 +96,18 @@ namespace ClearScriptAppStudy.Services
             });
         }
 
-        private void OnWriteLine(string format)
+        private void OnWriteLine(string message)
         {
-            Debug.WriteLine(format);
+            var outputLine = new OutputLine(message);
+
+            if (outputs.Any())
+            {
+                outputs.Insert(0, outputLine);
+            }
+            else
+            {
+                outputs.Add(outputLine);
+            }
         }
 
         protected virtual void Dispose(bool disposing)
@@ -123,4 +141,18 @@ namespace ClearScriptAppStudy.Services
             GC.SuppressFinalize(this);
         }
     }
+
+    public class OutputLine
+    {
+        public OutputLine(string message)
+        {
+            Occurrence = DateTime.Now;
+            Message = message;
+        }
+
+        public DateTime Occurrence { get; }
+
+        public string Message { get; set; }
+    }
+
 }
