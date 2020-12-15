@@ -9,8 +9,21 @@
         Width="640" Height="480"
         DataContext="{components:DataContextConnector Type={x:Type viewmodels:MainWindowViewModel}}">
     <Grid x:Name="LayoutRoot">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="10" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
             <RowDefinition Height="150" />
         </Grid.RowDefinitions>
 
@@ -20,7 +33,7 @@
             </MenuItem>
         </Menu>
 
-        <ListBox ItemsSource="{Binding Outputs}" Grid.Row="1">
+        <ListBox ItemsSource="{Binding Outputs}" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="6">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type services:OutputLine}">
                     <Grid>
@@ -35,9 +48,6 @@
             </ListBox.ItemTemplate>
 
         </ListBox>
-
-
-
 
     </Grid>
 </Window>
