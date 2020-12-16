@@ -78,11 +78,10 @@ namespace ClearScriptAppStudy.ViewModels
         {
             var person = new Person("Hallo", "test");
 
-
             // Skript ausführen
+            container.Resolve<ScriptService>()?.OnNewPerson(person);
 
             // hinzufügen und auswählen
-
             EditablePerson = person;
 
 

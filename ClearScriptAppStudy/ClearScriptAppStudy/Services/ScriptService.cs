@@ -110,6 +110,14 @@ namespace ClearScriptAppStudy.Services
             }
         }
 
+        public void OnNewPerson(Person person)
+        {
+            if (scriptEngine != null && new List<string>(scriptEngine.Script.PropertyNames).Contains("OnNewPerson"))
+            {
+                scriptEngine.Script.OnNewPerson(person);
+            }
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)

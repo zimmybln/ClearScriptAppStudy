@@ -43,13 +43,15 @@
 
         <Label Grid.Row="1" Grid.Column="1" Content="Anrede" VerticalAlignment="Center" />
         <TextBox Grid.Row="1" Grid.Column="2" Height="25" Margin="2" x:Name="fieldTitle"
-                 Text="{Binding EditablePerson.FirstName}"/>
+                 Text="{Binding EditablePerson.Title}"/>
 
         <Label Grid.Row="2" Grid.Column="1" Content="Vorname" VerticalAlignment="Center" />
-        <TextBox Grid.Row="2" Grid.Column="2" Height="25" Margin="2" x:Name="fieldFirstName" />
+        <TextBox Grid.Row="2" Grid.Column="2" Height="25" Margin="2" x:Name="fieldFirstName" 
+                 Text="{Binding EditablePerson.FirstName}" />
         
         <Label Grid.Row="3" Grid.Column="1" Content="Nachname" VerticalAlignment="Center" />
-        <TextBox Grid.Row="3" Grid.Column="2" Height="25" Margin="2" x:Name="fieldLastName" />
+        <TextBox Grid.Row="3" Grid.Column="2" Height="25" Margin="2" x:Name="fieldLastName" 
+                 Text="{Binding EditablePerson.LastName}" />
 
         <Label Grid.Row="1" Grid.Column="3" Content="Strasse" VerticalAlignment="Center" />
         <TextBox Grid.Row="1" Grid.Column="4" Height="25" Margin="2" x:Name="fieldStreet" />
