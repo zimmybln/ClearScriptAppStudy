@@ -1,4 +1,5 @@
 ﻿using ClearScriptAppStudy.Services;
+using ClearScriptAppStudy.Types;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -19,28 +20,77 @@ namespace ClearScriptAppStudy.ViewModels
         private readonly IContainerProvider container;
         private readonly IDialogService dialogService;
         private ICommand showScriptDialogCommand;
+        private ICommand newPersonCommand;
+        private ICommand savePersonCommand;
+
+        private Person selectedPerson;
+        private Person editablePerson;
+        private ObservableCollection<Person> persons;
+
 
         public MainWindowViewModel(IContainerProvider container,
                 IDialogService dialogService)
         {
             this.container = container;
             this.dialogService = dialogService;
-        }
 
+            persons = new ObservableCollection<Person>();
+        }
 
         public ICommand ShowScriptDialogCommand => 
             showScriptDialogCommand ??= new DelegateCommand(OnShowScriptDialog);
 
+        public ICommand NewPersonCommand =>
+            newPersonCommand ??= new DelegateCommand(OnNewPerson);
+
+        public ICommand SavePersonCommand =>
+            savePersonCommand ??= new DelegateCommand(OnSavePerson);
+
 
         public ObservableCollection<OutputLine> Outputs => container.Resolve<ScriptService>().Outputs;
 
+        public ObservableCollection<Person> Persons
+        {
+            get => persons;
+            set => SetProperty(ref persons, value);
+        }
+
+        public Person SelectedPerson
+        {
+            get => selectedPerson;
+            set => SetProperty(ref selectedPerson, value);
+        }
+
+        public Person EditablePerson
+        {
+            get => editablePerson;
+            set => SetProperty(ref editablePerson, value);
+        }
 
         private void OnShowScriptDialog()
         {
             var scriptService = container.Resolve<ScriptService>();
 
-
             scriptService.ShowScriptDialog();
+        }
+
+        private void OnNewPerson()
+        {
+            var person = new Person("Hallo", "test");
+
+
+            // Skript ausführen
+
+            // hinzufügen und auswählen
+
+            EditablePerson = person;
+
+
+        }
+
+        private void OnSavePerson()
+        {
+
         }
     }
 }

@@ -8,6 +8,10 @@
         x:Name="Name"
         Width="640" Height="480"
         DataContext="{components:DataContextConnector Type={x:Type viewmodels:MainWindowViewModel}}">
+    <Window.InputBindings>
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding ShowScriptDialogCommand}" />
+        <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding NewPersonCommand}" />
+    </Window.InputBindings>
     <Grid x:Name="LayoutRoot">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
@@ -18,7 +22,7 @@
             <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="40" />
             <RowDefinition Height="40" />
             <RowDefinition Height="40" />
@@ -27,11 +31,38 @@
             <RowDefinition Height="150" />
         </Grid.RowDefinitions>
 
-        <Menu>
+        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6">
+            <MenuItem Header="Daten">
+                <MenuItem Header="Neu" InputGestureText="Strg + N" Command="{Binding NewPersonCommand}" />
+                <MenuItem Header="Speichern" />
+            </MenuItem>
             <MenuItem Header="Tools">
                 <MenuItem Header="Script" Command="{Binding ShowScriptDialogCommand}" />
             </MenuItem>
         </Menu>
+
+        <Label Grid.Row="1" Grid.Column="1" Content="Anrede" VerticalAlignment="Center" />
+        <TextBox Grid.Row="1" Grid.Column="2" Height="25" Margin="2" x:Name="fieldTitle"
+                 Text="{Binding EditablePerson.FirstName}"/>
+
+        <Label Grid.Row="2" Grid.Column="1" Content="Vorname" VerticalAlignment="Center" />
+        <TextBox Grid.Row="2" Grid.Column="2" Height="25" Margin="2" x:Name="fieldFirstName" />
+        
+        <Label Grid.Row="3" Grid.Column="1" Content="Nachname" VerticalAlignment="Center" />
+        <TextBox Grid.Row="3" Grid.Column="2" Height="25" Margin="2" x:Name="fieldLastName" />
+
+        <Label Grid.Row="1" Grid.Column="3" Content="Strasse" VerticalAlignment="Center" />
+        <TextBox Grid.Row="1" Grid.Column="4" Height="25" Margin="2" x:Name="fieldStreet" />
+        
+        <Label Grid.Row="2" Grid.Column="3" Content="PLZ" VerticalAlignment="Center" />
+        <TextBox Grid.Row="2" Grid.Column="4" Height="25" Margin="2" x:Name="fieldZipCode" />
+        
+        <Label Grid.Row="3" Grid.Column="3" Content="Stadt" VerticalAlignment="Center" />
+        <TextBox Grid.Row="3" Grid.Column="4" Height="25" Margin="2" x:Name="fieldCity" />
+        
+        <Label Grid.Row="4" Grid.Column="1" Content="Notizen" VerticalAlignment="Top" />
+
+        <TextBox Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3" Margin="2" AcceptsReturn="True" x:Name="fieldNotes" />
 
         <ListBox ItemsSource="{Binding Outputs}" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="6">
             <ListBox.ItemTemplate>
