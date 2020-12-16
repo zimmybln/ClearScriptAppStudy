@@ -74,12 +74,12 @@ namespace ClearScriptAppStudy.ViewModels
             scriptService.ShowScriptDialog();
         }
 
-        private void OnNewPerson()
+        private async void OnNewPerson()
         {
             var person = new Person("Hallo", "test");
 
             // Skript ausführen
-            container.Resolve<ScriptService>()?.OnNewPerson(person);
+            await container.Resolve<ScriptService>()?.OnNewPerson(person);
 
             // hinzufügen und auswählen
             EditablePerson = person;

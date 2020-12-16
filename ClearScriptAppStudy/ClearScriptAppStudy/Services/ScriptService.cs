@@ -110,11 +110,14 @@ namespace ClearScriptAppStudy.Services
             }
         }
 
-        public void OnNewPerson(Person person)
+        public async Task OnNewPerson(Person person)
         {
             if (scriptEngine != null && new List<string>(scriptEngine.Script.PropertyNames).Contains("OnNewPerson"))
             {
-                scriptEngine.Script.OnNewPerson(person);
+                await Task.Run(() =>
+                {
+                    scriptEngine.Script.OnNewPerson(person);
+                });
             }
         }
 
