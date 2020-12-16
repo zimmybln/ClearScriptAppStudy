@@ -76,20 +76,22 @@ namespace ClearScriptAppStudy.ViewModels
 
         private async void OnNewPerson()
         {
-            var person = new Person("Hallo", "test");
+            var person = new Person();
 
             // Skript ausführen
             await container.Resolve<ScriptService>()?.OnNewPerson(person);
 
             // hinzufügen und auswählen
             EditablePerson = person;
-
-
         }
 
         private void OnSavePerson()
         {
-
+            if (EditablePerson != null)
+            {
+                Persons.Add(EditablePerson);
+                SelectedPerson = EditablePerson;
+            }
         }
     }
 }

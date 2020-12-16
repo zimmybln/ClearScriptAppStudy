@@ -9,7 +9,7 @@
         Width="640" Height="480"
         DataContext="{components:DataContextConnector Type={x:Type viewmodels:MainWindowViewModel}}">
     <Window.InputBindings>
-        <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding ShowScriptDialogCommand}" />
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SavePersonCommand}" />
         <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding NewPersonCommand}" />
     </Window.InputBindings>
     <Grid x:Name="LayoutRoot">
@@ -19,7 +19,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="150" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -28,13 +28,13 @@
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
             <RowDefinition Height="40" />
-            <RowDefinition Height="150" />
+            <RowDefinition Height="250" />
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6">
             <MenuItem Header="Daten">
                 <MenuItem Header="Neu" InputGestureText="Strg + N" Command="{Binding NewPersonCommand}" />
-                <MenuItem Header="Speichern" />
+                <MenuItem Header="Speichern" Command="{Binding SavePersonCommand}"/>
             </MenuItem>
             <MenuItem Header="Tools">
                 <MenuItem Header="Script" Command="{Binding ShowScriptDialogCommand}" />
@@ -65,6 +65,23 @@
         <Label Grid.Row="4" Grid.Column="1" Content="Notizen" VerticalAlignment="Top" />
 
         <TextBox Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3" Margin="2" AcceptsReturn="True" x:Name="fieldNotes" />
+
+        <ListBox ItemsSource="{Binding Persons}" Grid.Row="1" Grid.Column="5" Grid.RowSpan="4" Margin="2">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <TextBlock>
+                            <TextBlock.Text >
+                                <MultiBinding StringFormat="{}{1}, {0}">
+                                    <Binding Path="FirstName" />
+                                    <Binding Path="LastName" />
+                                </MultiBinding>                    
+                                       </TextBlock.Text>
+                        </TextBlock>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
         <ListBox ItemsSource="{Binding Outputs}" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="6">
             <ListBox.ItemTemplate>
