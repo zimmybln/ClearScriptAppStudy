@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace ClearScriptAppStudy.Dialogs
 {
@@ -21,23 +22,35 @@ namespace ClearScriptAppStudy.Dialogs
     /// </summary>
     public partial class ScriptDialogView : UserControl
     {
+        JavaScriptFolderStrategy foldingStrategy;
+        FoldingManager foldingManager;
+
+
         public ScriptDialogView()
         {
             InitializeComponent();
 
 
             textEditor.DocumentChanged += OnDocumentChanged;
+
+            DispatcherTimer foldingUpdateTimer = new DispatcherTimer();
+            foldingUpdateTimer.Interval = TimeSpan.FromSeconds(2);
+            foldingUpdateTimer.Tick += delegate {
+                if (foldingManager != null && textEditor.Document != null)
+                {
+                    foldingStrategy?.UpdateFoldings(foldingManager, textEditor.Document);
+                }
+            };
+            foldingUpdateTimer.Start();
         }
 
         private void OnDocumentChanged(object sender, EventArgs e)
         {
-            var foldingManager = FoldingManager.Install(textEditor.TextArea);
-            var foldingStrategy = new JavaScriptFolderStrategy();
+            foldingManager = FoldingManager.Install(textEditor.TextArea);
 
-
+            foldingStrategy = new JavaScriptFolderStrategy();
 
             foldingStrategy.UpdateFoldings(foldingManager, textEditor.Document);
-
         }
     }
 }
