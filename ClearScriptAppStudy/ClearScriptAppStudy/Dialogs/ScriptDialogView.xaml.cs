@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ICSharpCode.AvalonEdit.Folding;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,20 @@ namespace ClearScriptAppStudy.Dialogs
         public ScriptDialogView()
         {
             InitializeComponent();
+
+
+            textEditor.DocumentChanged += OnDocumentChanged;
+        }
+
+        private void OnDocumentChanged(object sender, EventArgs e)
+        {
+            var foldingManager = FoldingManager.Install(textEditor.TextArea);
+            var foldingStrategy = new JavaScriptFolderStrategy();
+
+
+
+            foldingStrategy.UpdateFoldings(foldingManager, textEditor.Document);
+
         }
     }
 }
