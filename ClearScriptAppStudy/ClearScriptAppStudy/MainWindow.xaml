@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:components="clr-namespace:ClearScriptAppStudy.Components"
         xmlns:viewmodels="clr-namespace:ClearScriptAppStudy.ViewModels"
-        xmlns:services="clr-namespace:ClearScriptAppStudy.Services"
+        xmlns:services="clr-namespace:ClearScriptAppStudy.Services" 
         Title="MainWindow"
         x:Name="Name"
         Width="840" Height="680"
@@ -43,7 +43,8 @@
 
         <Label Grid.Row="1" Grid.Column="1" Content="Anrede" VerticalAlignment="Center" />
         <TextBox Grid.Row="1" Grid.Column="2" Height="25" Margin="2" x:Name="fieldTitle"
-                 Text="{Binding EditablePerson.Title}"/>
+                 Text="{Binding EditablePerson.Title}">
+        </TextBox>
 
         <Label Grid.Row="2" Grid.Column="1" Content="Vorname" VerticalAlignment="Center" />
         <TextBox Grid.Row="2" Grid.Column="2" Height="25" Margin="2" x:Name="fieldFirstName" 
@@ -54,29 +55,33 @@
                  Text="{Binding EditablePerson.LastName}" />
 
         <Label Grid.Row="1" Grid.Column="3" Content="Strasse" VerticalAlignment="Center" />
-        <TextBox Grid.Row="1" Grid.Column="4" Height="25" Margin="2" x:Name="fieldStreet" />
+        <TextBox Grid.Row="1" Grid.Column="4" Height="25" Margin="2" x:Name="fieldStreet"
+                 Text="{Binding EditablePerson.Street}"/>
         
         <Label Grid.Row="2" Grid.Column="3" Content="PLZ" VerticalAlignment="Center" />
-        <TextBox Grid.Row="2" Grid.Column="4" Height="25" Margin="2" x:Name="fieldZipCode" />
+        <TextBox Grid.Row="2" Grid.Column="4" Height="25" Margin="2" x:Name="fieldZipCode" 
+                 Text="{Binding EditablePerson.ZipCode}"/>
         
         <Label Grid.Row="3" Grid.Column="3" Content="Stadt" VerticalAlignment="Center" />
-        <TextBox Grid.Row="3" Grid.Column="4" Height="25" Margin="2" x:Name="fieldCity" />
+        <TextBox Grid.Row="3" Grid.Column="4" Height="25" Margin="2" x:Name="fieldCity" 
+                 Text="{Binding EditablePerson.City}"/>
         
         <Label Grid.Row="4" Grid.Column="1" Content="Notizen" VerticalAlignment="Top" />
 
-        <TextBox Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3" Margin="2" AcceptsReturn="True" x:Name="fieldNotes" />
+        <TextBox Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3" Margin="2" AcceptsReturn="True" x:Name="fieldNotes" 
+                 Text="{Binding EditablePerson.Notes}"/>
 
         <ListBox ItemsSource="{Binding Persons}" Grid.Row="1" Grid.Column="5" Grid.RowSpan="4" Margin="2">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <TextBlock>
+                        <TextBlock ToolTip="{Binding Notes}">
                             <TextBlock.Text >
                                 <MultiBinding StringFormat="{}{1}, {0}">
                                     <Binding Path="FirstName" />
                                     <Binding Path="LastName" />
                                 </MultiBinding>                    
-                                       </TextBlock.Text>
+                            </TextBlock.Text>
                         </TextBlock>
                     </Grid>
                 </DataTemplate>

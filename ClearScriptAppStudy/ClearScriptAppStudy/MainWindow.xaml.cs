@@ -25,5 +25,10 @@ namespace ClearScriptAppStudy
         {
             InitializeComponent();
         }
+
+        private void Name_GotFocus(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

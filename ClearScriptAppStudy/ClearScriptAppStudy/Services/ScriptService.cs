@@ -61,6 +61,13 @@ namespace ClearScriptAppStudy.Services
 
                     scriptEngine.AddHostObject("Console", new ClearScriptAppStudy.ScriptObjects.Console(OnWriteLine));
 
+                    var field = new Dictionary<string, string>()
+                    {
+                        { "eins", "Das ist der Wert für eins" }
+                    };
+
+                    scriptEngine.AddHostObject("Field", field);
+
                     scriptEngine.Execute(scriptSettings.Script);
 
                     if (new List<string>(scriptEngine.Script.PropertyNames).Contains("Initialized"))

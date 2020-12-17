@@ -19,9 +19,11 @@ namespace ClearScriptAppStudy.ViewModels
     {
         private readonly IContainerProvider container;
         private readonly IDialogService dialogService;
+        private UIElement focusedElement;
         private ICommand showScriptDialogCommand;
         private ICommand newPersonCommand;
         private ICommand savePersonCommand;
+        private ICommand onFocusCommand;
 
         private Person selectedPerson;
         private Person editablePerson;
@@ -45,6 +47,9 @@ namespace ClearScriptAppStudy.ViewModels
 
         public ICommand SavePersonCommand =>
             savePersonCommand ??= new DelegateCommand(OnSavePerson);
+
+        public ICommand GotFocusCommand =>
+            onFocusCommand ??= new DelegateCommand<RoutedEventArgs>(OnGotFocus);
 
 
         public ObservableCollection<OutputLine> Outputs => container.Resolve<ScriptService>().Outputs;
@@ -72,6 +77,11 @@ namespace ClearScriptAppStudy.ViewModels
             var scriptService = container.Resolve<ScriptService>();
 
             scriptService.ShowScriptDialog();
+        }
+
+        private void OnGotFocus(RoutedEventArgs args)
+        {
+
         }
 
         private async void OnNewPerson()

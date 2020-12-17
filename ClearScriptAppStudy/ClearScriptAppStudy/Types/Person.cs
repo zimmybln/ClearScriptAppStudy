@@ -19,6 +19,7 @@ namespace ClearScriptAppStudy.Types
         private string city;
         private string zipCode;
         private string notes;
+        private Guid id = Guid.NewGuid();
 
         public Person()
         {
@@ -30,6 +31,8 @@ namespace ClearScriptAppStudy.Types
             this.firstName = firstName;
             this.lastName = lastName;
         }
+
+        public Guid Id => id;
 
         public string FirstName
         {
