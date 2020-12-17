@@ -6,7 +6,7 @@
         xmlns:services="clr-namespace:ClearScriptAppStudy.Services"
         Title="MainWindow"
         x:Name="Name"
-        Width="640" Height="480"
+        Width="840" Height="680"
         DataContext="{components:DataContextConnector Type={x:Type viewmodels:MainWindowViewModel}}">
     <Window.InputBindings>
         <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SavePersonCommand}" />
@@ -19,7 +19,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="300" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

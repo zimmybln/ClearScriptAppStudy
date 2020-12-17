@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 
 namespace ClearScriptAppStudy.Services
 {
@@ -20,11 +21,14 @@ namespace ClearScriptAppStudy.Services
         private ApplicationScript applicationScript = null;
         private V8ScriptEngine scriptEngine = null;
         private ObservableCollection<OutputLine> outputs = new ObservableCollection<OutputLine>();
+        private object lockOutputs = new object();
         private bool disposedValue;
 
         public ScriptService(IDialogService dialogService)
         {
             this.dialogService = dialogService;
+
+            BindingOperations.EnableCollectionSynchronization(outputs, lockOutputs);
         }
 
         public ObservableCollection<OutputLine> Outputs
@@ -55,14 +59,9 @@ namespace ClearScriptAppStudy.Services
                 {
                     Outputs.Clear();
 
-                    //scriptEngine.AddHostObject("Questions", questionDictionary);
                     scriptEngine.AddHostObject("Console", new ClearScriptAppStudy.ScriptObjects.Console(OnWriteLine));
 
-                    //scriptEngine.AddHostType(typeof(QuestionTextContent));
-
                     scriptEngine.Execute(scriptSettings.Script);
-
-                    // AddDebugMessage("Die Skriptausführungs wurde erfolgreich erstellt");
 
                     if (new List<string>(scriptEngine.Script.PropertyNames).Contains("Initialized"))
                     {
@@ -127,27 +126,14 @@ namespace ClearScriptAppStudy.Services
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects)
-
                     scriptEngine?.Dispose();
                 }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
                 disposedValue = true;
             }
         }
 
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~ScriptService()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
-
         void IDisposable.Dispose()
         {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
