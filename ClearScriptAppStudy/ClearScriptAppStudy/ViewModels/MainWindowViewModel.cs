@@ -28,6 +28,7 @@ namespace ClearScriptAppStudy.ViewModels
         private Person selectedPerson;
         private Person editablePerson;
         private ObservableCollection<Person> persons;
+        private bool areToolsVisible = true;
 
 
         public MainWindowViewModel(IContainerProvider container,
@@ -51,7 +52,6 @@ namespace ClearScriptAppStudy.ViewModels
         public ICommand GotFocusCommand =>
             onFocusCommand ??= new DelegateCommand<RoutedEventArgs>(OnGotFocus);
 
-
         public ObservableCollection<OutputLine> Outputs => container.Resolve<ScriptService>().Outputs;
 
         public ObservableCollection<Person> Persons
@@ -70,6 +70,12 @@ namespace ClearScriptAppStudy.ViewModels
         {
             get => editablePerson;
             set => SetProperty(ref editablePerson, value);
+        }
+
+        public bool AreToolsVisible
+        {
+            get => areToolsVisible;
+            set => SetProperty(ref areToolsVisible, value);
         }
 
         private void OnShowScriptDialog()

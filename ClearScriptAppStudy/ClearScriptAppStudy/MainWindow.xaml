@@ -28,7 +28,20 @@
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
             <RowDefinition Height="40" />
-            <RowDefinition Height="250" />
+            <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="{x:Type RowDefinition}">
+                            <Setter Property="Height" Value="Auto" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AreToolsVisible, Mode=TwoWay}" Value="False">
+                                <Setter Property="Height" Value="0" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+
+            </RowDefinition>
+            <RowDefinition Height="25" />
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6">
@@ -38,6 +51,7 @@
             </MenuItem>
             <MenuItem Header="Tools">
                 <MenuItem Header="Script" Command="{Binding ShowScriptDialogCommand}" />
+                <MenuItem Header="Ausgabe" IsCheckable="True" IsChecked="{Binding AreToolsVisible, Mode=TwoWay}" />
             </MenuItem>
         </Menu>
 
@@ -88,7 +102,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <ListBox ItemsSource="{Binding Outputs}" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="6">
+        <ListBox ItemsSource="{Binding Outputs}" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="6" Height="150">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type services:OutputLine}">
                     <Grid>
@@ -104,6 +118,9 @@
 
         </ListBox>
 
+        <StatusBar Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6">
+            
+        </StatusBar>
     </Grid>
 </Window>
 
