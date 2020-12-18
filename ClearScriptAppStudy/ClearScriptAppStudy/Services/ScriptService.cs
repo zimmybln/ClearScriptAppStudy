@@ -69,11 +69,6 @@ namespace ClearScriptAppStudy.Services
                     scriptEngine.AddHostObject("Field", field);
 
                     scriptEngine.Execute(scriptSettings.Script);
-
-                    if (new List<string>(scriptEngine.Script.PropertyNames).Contains("Initialized"))
-                    {
-                        scriptEngine.Script.Initialized();
-                    }
                 }
                 catch(Exception ex)
                 {
