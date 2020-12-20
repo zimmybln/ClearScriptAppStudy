@@ -12,10 +12,10 @@ namespace ClearScriptAppStudy.ScriptObjects
 {
     public class Application 
     {
-        public string StatusInfo
+        public string StateInfo
         {
-            get => ((MainWindowViewModel)System.Windows.Application.Current.MainWindow.DataContext).StatusInfo;
-            set => ((MainWindowViewModel)System.Windows.Application.Current.MainWindow.DataContext).StatusInfo = value;
+            get => ((MainWindowViewModel)System.Windows.Application.Current.MainWindow.DataContext).StateInfo;
+            set => ((MainWindowViewModel)System.Windows.Application.Current.MainWindow.DataContext).StateInfo = value;
         }
     }
 }

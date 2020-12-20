@@ -120,7 +120,7 @@
         </ListBox>
 
         <StatusBar Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6">
-            <StatusBarItem Content="{Binding StatusInfo}" />
+            <StatusBarItem Content="{Binding StateInfo}" />
         </StatusBar>
     </Grid>
 </Window>

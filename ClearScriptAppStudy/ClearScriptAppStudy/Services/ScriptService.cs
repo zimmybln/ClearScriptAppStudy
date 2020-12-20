@@ -75,7 +75,7 @@ namespace ClearScriptAppStudy.Services
                 }
                 catch(Exception ex)
                 {
-
+                    OnWriteLine($"Fehler bei der Initialisierung {ex.Message}");
                 }
             }
             else

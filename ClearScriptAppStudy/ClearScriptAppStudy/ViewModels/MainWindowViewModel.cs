@@ -7,11 +7,13 @@ using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace ClearScriptAppStudy.ViewModels
 {
@@ -29,7 +31,9 @@ namespace ClearScriptAppStudy.ViewModels
         private Person editablePerson;
         private ObservableCollection<Person> persons;
         private bool areToolsVisible = true;
-        private string statusInfo;
+        private string stateInfo;
+        private int stateInfoTimeout = 5;
+        private DispatcherTimer stateInfoTimer;
 
 
         public MainWindowViewModel(IContainerProvider container,
@@ -38,7 +42,15 @@ namespace ClearScriptAppStudy.ViewModels
             this.container = container;
             this.dialogService = dialogService;
 
+            stateInfoTimer = new DispatcherTimer(new TimeSpan(0, 0, stateInfoTimeout), DispatcherPriority.Background, OnStateTimer,
+                Dispatcher.CurrentDispatcher);
+
             persons = new ObservableCollection<Person>();
+        }
+
+        private void OnStateTimer(object? sender, EventArgs e)
+        {
+            StateInfo = String.Empty;
         }
 
         public ICommand ShowScriptDialogCommand => 
@@ -79,10 +91,28 @@ namespace ClearScriptAppStudy.ViewModels
             set => SetProperty(ref areToolsVisible, value);
         }
 
-        public string StatusInfo
+        public string StateInfo
         {
-            get => statusInfo;
-            set => SetProperty(ref statusInfo, value);
+            get => stateInfo;
+            set => SetProperty(ref stateInfo, value, OnStateInfoChanged);
+        }
+
+        private void OnStateInfoChanged()
+        {
+            stateInfoTimer.Stop();
+
+
+            if (!String.IsNullOrEmpty(StateInfo) && StateInfoTimeout > 0)
+            {
+                stateInfoTimer.Interval = new TimeSpan(0, 0, 0, StateInfoTimeout);
+                stateInfoTimer.Start();
+            }
+        }
+
+        public int StateInfoTimeout
+        {
+            get => stateInfoTimeout;
+            set => SetProperty(ref stateInfoTimeout, value);
         }
 
         private void OnShowScriptDialog()
