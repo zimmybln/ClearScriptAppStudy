@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using ClearScriptAppStudy.ScriptObjects;
+
 
 namespace ClearScriptAppStudy.Services
 {
@@ -59,7 +61,8 @@ namespace ClearScriptAppStudy.Services
                 {
                     Outputs.Clear();
 
-                    scriptEngine.AddHostObject("Console", new ClearScriptAppStudy.ScriptObjects.Console(OnWriteLine));
+                    scriptEngine.AddHostObject("Console", new ScriptObjects.Console(OnWriteLine));
+                    scriptEngine.AddHostObject("Application", new ScriptObjects.Application());
 
                     var field = new Dictionary<string, string>()
                     {

@@ -29,6 +29,7 @@ namespace ClearScriptAppStudy.ViewModels
         private Person editablePerson;
         private ObservableCollection<Person> persons;
         private bool areToolsVisible = true;
+        private string statusInfo;
 
 
         public MainWindowViewModel(IContainerProvider container,
@@ -76,6 +77,12 @@ namespace ClearScriptAppStudy.ViewModels
         {
             get => areToolsVisible;
             set => SetProperty(ref areToolsVisible, value);
+        }
+
+        public string StatusInfo
+        {
+            get => statusInfo;
+            set => SetProperty(ref statusInfo, value);
         }
 
         private void OnShowScriptDialog()

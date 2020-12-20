@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:components="clr-namespace:ClearScriptAppStudy.Components"
         xmlns:viewmodels="clr-namespace:ClearScriptAppStudy.ViewModels"
-        xmlns:services="clr-namespace:ClearScriptAppStudy.Services" 
+        xmlns:services="clr-namespace:ClearScriptAppStudy.Services"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         Title="MainWindow"
         x:Name="Name"
         Width="840" Height="680"
@@ -29,16 +30,16 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="40" />
             <RowDefinition>
-                    <RowDefinition.Style>
-                        <Style TargetType="{x:Type RowDefinition}">
-                            <Setter Property="Height" Value="Auto" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding AreToolsVisible, Mode=TwoWay}" Value="False">
+                <RowDefinition.Style>
+                    <Style TargetType="{x:Type RowDefinition}">
+                        <Setter Property="Height" Value="Auto" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AreToolsVisible, Mode=TwoWay}" Value="False">
                                 <Setter Property="Height" Value="0" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </RowDefinition.Style>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
 
             </RowDefinition>
             <RowDefinition Height="25" />
@@ -63,7 +64,7 @@
         <Label Grid.Row="2" Grid.Column="1" Content="Vorname" VerticalAlignment="Center" />
         <TextBox Grid.Row="2" Grid.Column="2" Height="25" Margin="2" x:Name="fieldFirstName" 
                  Text="{Binding EditablePerson.FirstName}" />
-        
+
         <Label Grid.Row="3" Grid.Column="1" Content="Nachname" VerticalAlignment="Center" />
         <TextBox Grid.Row="3" Grid.Column="2" Height="25" Margin="2" x:Name="fieldLastName" 
                  Text="{Binding EditablePerson.LastName}" />
@@ -71,15 +72,15 @@
         <Label Grid.Row="1" Grid.Column="3" Content="Strasse" VerticalAlignment="Center" />
         <TextBox Grid.Row="1" Grid.Column="4" Height="25" Margin="2" x:Name="fieldStreet"
                  Text="{Binding EditablePerson.Street}"/>
-        
+
         <Label Grid.Row="2" Grid.Column="3" Content="PLZ" VerticalAlignment="Center" />
         <TextBox Grid.Row="2" Grid.Column="4" Height="25" Margin="2" x:Name="fieldZipCode" 
                  Text="{Binding EditablePerson.ZipCode}"/>
-        
+
         <Label Grid.Row="3" Grid.Column="3" Content="Stadt" VerticalAlignment="Center" />
         <TextBox Grid.Row="3" Grid.Column="4" Height="25" Margin="2" x:Name="fieldCity" 
                  Text="{Binding EditablePerson.City}"/>
-        
+
         <Label Grid.Row="4" Grid.Column="1" Content="Notizen" VerticalAlignment="Top" />
 
         <TextBox Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3" Margin="2" AcceptsReturn="True" x:Name="fieldNotes" 
@@ -94,7 +95,7 @@
                                 <MultiBinding StringFormat="{}{1}, {0}">
                                     <Binding Path="FirstName" />
                                     <Binding Path="LastName" />
-                                </MultiBinding>                    
+                                </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
                     </Grid>
@@ -119,7 +120,7 @@
         </ListBox>
 
         <StatusBar Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6">
-            
+            <StatusBarItem Content="{Binding StatusInfo}" />
         </StatusBar>
     </Grid>
 </Window>
