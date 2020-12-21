@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Documents;
 using ClearScriptAppStudy.ScriptObjects;
 
 
@@ -75,12 +76,8 @@ namespace ClearScriptAppStudy.Services
                 }
                 catch(Exception ex)
                 {
-                    OnWriteLine($"Fehler bei der Initialisierung {ex.Message}");
+                    OnWriteLine($"Fehler bei der Initialisierung {ex.Message}", OutputTypes.Error);
                 }
-            }
-            else
-            {
-                // AddDebugMessage("Es wurde keine Umgebung für die Skriptausführung erstellt");
             }
         }
 
@@ -100,9 +97,9 @@ namespace ClearScriptAppStudy.Services
             });
         }
 
-        private void OnWriteLine(string message)
+        private void OnWriteLine(string message, OutputTypes outputType = OutputTypes.Info)
         {
-            var outputLine = new OutputLine(message);
+            var outputLine = new OutputLine(message) {OutputType = outputType};
 
             if (outputs.Any())
             {
@@ -121,6 +118,18 @@ namespace ClearScriptAppStudy.Services
                 await Task.Run(() =>
                 {
                     scriptEngine.Script.OnNewPerson(person);
+                });
+            }
+        }
+
+        public async Task OnPersonSaved(Person person)
+        {
+            if (scriptEngine != null &&
+                new List<string>(scriptEngine.Script.PropertyNames).Contains(nameof(OnPersonSaved)))
+            {
+                await Task.Run(() =>
+                {
+                    scriptEngine.Script.OnPersonSaved(person);
                 });
             }
         }
@@ -144,6 +153,15 @@ namespace ClearScriptAppStudy.Services
         }
     }
 
+    public enum OutputTypes
+    {
+        Info = 0,
+        
+        Warning = 1,
+        
+        Error = 2
+    }
+
     public class OutputLine
     {
         public OutputLine(string message)
@@ -151,6 +169,7 @@ namespace ClearScriptAppStudy.Services
             Occurrence = DateTime.Now;
             Message = message;
         }
+        public OutputTypes OutputType { get; set; }
 
         public DateTime Occurrence { get; }
 

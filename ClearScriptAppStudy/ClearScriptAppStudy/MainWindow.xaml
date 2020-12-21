@@ -5,6 +5,7 @@
         xmlns:viewmodels="clr-namespace:ClearScriptAppStudy.ViewModels"
         xmlns:services="clr-namespace:ClearScriptAppStudy.Services"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:converter="clr-namespace:ClearScriptAppStudy.Components.Converter"
         Title="MainWindow"
         x:Name="Name"
         Width="840" Height="680"
@@ -13,6 +14,9 @@
         <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SavePersonCommand}" />
         <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding NewPersonCommand}" />
     </Window.InputBindings>
+    <Window.Resources>
+        <converter:OutputTypeConverter x:Key="OutputTypeConverter" />
+    </Window.Resources>
     <Grid x:Name="LayoutRoot">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
@@ -109,10 +113,13 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="20" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding Occurrence, StringFormat='hh:mm:ss.fff'}" />
-                        <TextBlock Grid.Column="1" Text="{Binding Message}" />
+                        <TextBlock Grid.Column="0" Text="{Binding Occurrence, StringFormat='HH:mm:ss.fff'}" />
+                        <Border BorderBrush="Black" BorderThickness="1" Background="{Binding OutputType, Converter={StaticResource OutputTypeConverter}}"
+                                Grid.Column="1" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="{Binding Message}" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

@@ -123,7 +123,7 @@ namespace ClearScriptAppStudy.ViewModels
         }
 
         private void OnGotFocus(RoutedEventArgs args)
-        {
+        { 
 
         }
 
@@ -138,12 +138,16 @@ namespace ClearScriptAppStudy.ViewModels
             EditablePerson = person;
         }
 
-        private void OnSavePerson()
+        private async void OnSavePerson()
         {
             if (EditablePerson != null)
             {
+                // save the person here
+                await container.Resolve<ScriptService>().OnPersonSaved(EditablePerson);
+                
                 Persons.Add(EditablePerson);
                 SelectedPerson = EditablePerson;
+                EditablePerson = null;
             }
         }
     }
