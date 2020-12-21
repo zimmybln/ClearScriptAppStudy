@@ -19,7 +19,7 @@ namespace ClearScriptAppStudy.Types
         private string city;
         private string zipCode;
         private string notes;
-        private Guid id = Guid.NewGuid();
+        private Guid id = Guid.Empty;
 
         public Person()
         {
@@ -32,7 +32,18 @@ namespace ClearScriptAppStudy.Types
             this.lastName = lastName;
         }
 
-        public Guid Id => id;
+        public Guid Id
+        {
+            get => id;
+            set
+            {
+                if (!id.Equals(value))
+                {
+                    id = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
         public string FirstName
         {

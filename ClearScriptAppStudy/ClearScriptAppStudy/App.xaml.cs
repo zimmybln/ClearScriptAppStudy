@@ -12,6 +12,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace ClearScriptAppStudy
 {
@@ -22,6 +24,10 @@ namespace ClearScriptAppStudy
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            EventManager.RegisterClassHandler(typeof(TextBox), TextBox.GotFocusEvent, new RoutedEventHandler(OnTextBoxGotFocus));
+
+
+
             base.OnStartup(e);
 
             var settingsScript = new SettingsManager<ApplicationScript>("ClearScriptAppStudy.json");
@@ -73,6 +79,12 @@ namespace ClearScriptAppStudy
             settingsManager.SaveSettings(this.Container.Resolve<ScriptService>().Script);
 
             base.OnExit(e);
+        }
+
+        private void OnTextBoxGotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            tb.Dispatcher.BeginInvoke(new Action(() => tb.SelectAll()));
         }
     }
 }

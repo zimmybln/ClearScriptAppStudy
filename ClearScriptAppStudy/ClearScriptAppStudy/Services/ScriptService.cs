@@ -26,6 +26,7 @@ namespace ClearScriptAppStudy.Services
         private ObservableCollection<OutputLine> outputs = new ObservableCollection<OutputLine>();
         private object lockOutputs = new object();
         private bool disposedValue;
+        private List<string> listOfPropertyNames;
 
         public ScriptService(IDialogService dialogService)
         {
@@ -73,6 +74,8 @@ namespace ClearScriptAppStudy.Services
                     scriptEngine.AddHostObject("Field", field);
 
                     scriptEngine.Execute(scriptSettings.Script);
+
+                    listOfPropertyNames = new List<string>(scriptEngine.Script.PropertyNames);
                 }
                 catch(Exception ex)
                 {
@@ -124,12 +127,22 @@ namespace ClearScriptAppStudy.Services
 
         public async Task OnPersonSaved(Person person)
         {
-            if (scriptEngine != null &&
-                new List<string>(scriptEngine.Script.PropertyNames).Contains(nameof(OnPersonSaved)))
+            if (scriptEngine != null && listOfPropertyNames.Contains(nameof(OnPersonSaved)))
             {
                 await Task.Run(() =>
                 {
                     scriptEngine.Script.OnPersonSaved(person);
+                });
+            }
+        }
+
+        public async Task OnFieldGotFocus(Person person, string propertyName)
+        {
+            if (scriptEngine != null && listOfPropertyNames.Contains(nameof(OnFieldGotFocus)))
+            {
+                await Task.Run(() =>
+                {
+                    scriptEngine.Script.OnFieldGotFocus(person, propertyName);
                 });
             }
         }

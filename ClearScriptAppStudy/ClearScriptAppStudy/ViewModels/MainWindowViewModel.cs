@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using ClearScriptAppStudy.Components.Behaviors;
 
 namespace ClearScriptAppStudy.ViewModels
 {
@@ -21,6 +22,7 @@ namespace ClearScriptAppStudy.ViewModels
     {
         private readonly IContainerProvider container;
         private readonly IDialogService dialogService;
+        private readonly ScriptService scriptService;
         private UIElement focusedElement;
         private ICommand showScriptDialogCommand;
         private ICommand newPersonCommand;
@@ -32,20 +34,35 @@ namespace ClearScriptAppStudy.ViewModels
         private ObservableCollection<Person> persons;
         private bool areToolsVisible = true;
         private string stateInfo;
+        private string fieldInfo;
         private int stateInfoTimeout = 5;
         private DispatcherTimer stateInfoTimer;
+        private DispatcherTimer fieldInfoTimer;
+        private EventAction eventAction;
 
 
-        public MainWindowViewModel(IContainerProvider container,
-                IDialogService dialogService)
+        public MainWindowViewModel(
+                IContainerProvider container,
+                IDialogService dialogService,
+                ScriptService scriptService)
         {
             this.container = container;
             this.dialogService = dialogService;
+            this.scriptService = scriptService;
+
+            eventAction = new GotFocusToScriptAction(this.scriptService);
 
             stateInfoTimer = new DispatcherTimer(new TimeSpan(0, 0, stateInfoTimeout), DispatcherPriority.Background, OnStateTimer,
                 Dispatcher.CurrentDispatcher);
+            fieldInfoTimer = new DispatcherTimer(new TimeSpan(0, 0, stateInfoTimeout), DispatcherPriority.Background, OnFieldTimer, 
+                Dispatcher.CurrentDispatcher);
 
             persons = new ObservableCollection<Person>();
+        }
+
+        private void OnFieldTimer(object? sender, EventArgs e)
+        {
+            FieldInfo = string.Empty;
         }
 
         private void OnStateTimer(object? sender, EventArgs e)
@@ -109,6 +126,28 @@ namespace ClearScriptAppStudy.ViewModels
             }
         }
 
+        public string FieldInfo
+        {
+            get => fieldInfo;
+            set => SetProperty(ref fieldInfo, value, OnFieldInfoChanged);
+        }
+
+        private void OnFieldInfoChanged()
+        {
+            fieldInfoTimer.Stop();
+
+
+            if (!String.IsNullOrEmpty(FieldInfo) && StateInfoTimeout > 0)
+            {
+                fieldInfoTimer.Interval = new TimeSpan(0, 0, 0, StateInfoTimeout);
+                fieldInfoTimer.Start();
+            }
+        }
+
+        public EventAction GotFocusAction => eventAction;
+
+
+
         public int StateInfoTimeout
         {
             get => stateInfoTimeout;
@@ -143,8 +182,12 @@ namespace ClearScriptAppStudy.ViewModels
             if (EditablePerson != null)
             {
                 // save the person here
-                await container.Resolve<ScriptService>().OnPersonSaved(EditablePerson);
+                EditablePerson.Id = Guid.NewGuid();
                 
+                // inform the script about the saved person
+                await container.Resolve<ScriptService>().OnPersonSaved(EditablePerson);
+
+                // fit the ui
                 Persons.Add(EditablePerson);
                 SelectedPerson = EditablePerson;
                 EditablePerson = null;

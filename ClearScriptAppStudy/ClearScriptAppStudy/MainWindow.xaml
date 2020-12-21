@@ -4,7 +4,7 @@
         xmlns:components="clr-namespace:ClearScriptAppStudy.Components"
         xmlns:viewmodels="clr-namespace:ClearScriptAppStudy.ViewModels"
         xmlns:services="clr-namespace:ClearScriptAppStudy.Services"
-        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:behaviors="clr-namespace:ClearScriptAppStudy.Components.Behaviors"
         xmlns:converter="clr-namespace:ClearScriptAppStudy.Components.Converter"
         Title="MainWindow"
         x:Name="Name"
@@ -62,12 +62,13 @@
 
         <Label Grid.Row="1" Grid.Column="1" Content="Anrede" VerticalAlignment="Center" />
         <TextBox Grid.Row="1" Grid.Column="2" Height="25" Margin="2" x:Name="fieldTitle"
-                 Text="{Binding EditablePerson.Title}">
+                 Text="{Binding EditablePerson.Title}"
+                 AutoWordSelection="True">
         </TextBox>
 
         <Label Grid.Row="2" Grid.Column="1" Content="Vorname" VerticalAlignment="Center" />
         <TextBox Grid.Row="2" Grid.Column="2" Height="25" Margin="2" x:Name="fieldFirstName" 
-                 Text="{Binding EditablePerson.FirstName}" />
+                 Text="{Binding EditablePerson.FirstName}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
 
         <Label Grid.Row="3" Grid.Column="1" Content="Nachname" VerticalAlignment="Center" />
         <TextBox Grid.Row="3" Grid.Column="2" Height="25" Margin="2" x:Name="fieldLastName" 
@@ -127,7 +128,20 @@
         </ListBox>
 
         <StatusBar Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6">
-            <StatusBarItem Content="{Binding StateInfo}" />
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Content="{Binding StateInfo}" Grid.Column="0"/>
+            <Separator Grid.Column="1" />
+            <StatusBarItem Content="{Binding FieldInfo}" Grid.Column="2"/>
         </StatusBar>
     </Grid>
 </Window>
