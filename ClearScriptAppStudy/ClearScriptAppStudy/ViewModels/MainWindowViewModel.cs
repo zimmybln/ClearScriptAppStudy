@@ -21,12 +21,10 @@ namespace ClearScriptAppStudy.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private readonly IContainerProvider container;
-        private readonly IDialogService dialogService;
         private readonly ScriptService scriptService;
         private ICommand showScriptDialogCommand;
         private ICommand newPersonCommand;
         private ICommand savePersonCommand;
-        private ICommand onFocusCommand;
 
         private Person selectedPerson;
         private Person editablePerson;
@@ -35,25 +33,22 @@ namespace ClearScriptAppStudy.ViewModels
         private string stateInfo;
         private string fieldInfo;
         private int stateInfoTimeout = 5;
+        private int fieldInfoTimeout = 10;
         private readonly DispatcherTimer stateInfoTimer;
         private readonly DispatcherTimer fieldInfoTimer;
-        private readonly EventAction eventAction;
-
 
         public MainWindowViewModel(
                 IContainerProvider container,
-                IDialogService dialogService,
                 ScriptService scriptService)
         {
             this.container = container;
-            this.dialogService = dialogService;
             this.scriptService = scriptService;
 
-            eventAction = new GotFocusToScriptAction<Person>(this.scriptService);
+            GotFocusAction = new GotFocusToScriptAction<Person>(this.scriptService);
 
             stateInfoTimer = new DispatcherTimer(new TimeSpan(0, 0, stateInfoTimeout), DispatcherPriority.Background, OnStateTimer,
                 Dispatcher.CurrentDispatcher);
-            fieldInfoTimer = new DispatcherTimer(new TimeSpan(0, 0, stateInfoTimeout), DispatcherPriority.Background, OnFieldTimer, 
+            fieldInfoTimer = new DispatcherTimer(new TimeSpan(0, 0, fieldInfoTimeout), DispatcherPriority.Background, OnFieldTimer, 
                 Dispatcher.CurrentDispatcher);
 
             persons = new ObservableCollection<Person>();
@@ -66,7 +61,7 @@ namespace ClearScriptAppStudy.ViewModels
 
         private void OnStateTimer(object? sender, EventArgs e)
         {
-            StateInfo = String.Empty;
+            StateInfo = string.Empty;
         }
 
         public ICommand ShowScriptDialogCommand => 
@@ -78,10 +73,7 @@ namespace ClearScriptAppStudy.ViewModels
         public ICommand SavePersonCommand =>
             savePersonCommand ??= new DelegateCommand(OnSavePerson);
 
-        public ICommand GotFocusCommand =>
-            onFocusCommand ??= new DelegateCommand<RoutedEventArgs>(OnGotFocus);
-
-        public ObservableCollection<OutputLine> Outputs => container.Resolve<ScriptService>().Outputs;
+        public ObservableCollection<OutputLine> Outputs => scriptService.Outputs;
 
         public ObservableCollection<Person> Persons
         {
@@ -138,13 +130,12 @@ namespace ClearScriptAppStudy.ViewModels
 
             if (!String.IsNullOrEmpty(FieldInfo) && StateInfoTimeout > 0)
             {
-                fieldInfoTimer.Interval = new TimeSpan(0, 0, 0, StateInfoTimeout);
+                fieldInfoTimer.Interval = new TimeSpan(0, 0, 0, FieldInfoTimeout);
                 fieldInfoTimer.Start();
             }
         }
 
-        public EventAction GotFocusAction => eventAction;
-
+        public EventAction GotFocusAction { get; }
 
 
         public int StateInfoTimeout
@@ -153,16 +144,15 @@ namespace ClearScriptAppStudy.ViewModels
             set => SetProperty(ref stateInfoTimeout, value);
         }
 
-        private void OnShowScriptDialog()
+        public int FieldInfoTimeout
         {
-            var scriptService = container.Resolve<ScriptService>();
-
-            scriptService.ShowScriptDialog();
+            get => fieldInfoTimeout;
+            set => SetProperty(ref fieldInfoTimeout, value);
         }
 
-        private void OnGotFocus(RoutedEventArgs args)
-        { 
-
+        private void OnShowScriptDialog()
+        {
+            scriptService.ShowScriptDialog();
         }
 
         private async void OnNewPerson()
@@ -170,7 +160,7 @@ namespace ClearScriptAppStudy.ViewModels
             var person = new Person();
 
             // Skript ausführen
-            await container.Resolve<ScriptService>()?.OnNewPerson(person);
+            await scriptService.OnNewPerson(person);
 
             // hinzufügen und auswählen
             EditablePerson = person;
@@ -184,7 +174,7 @@ namespace ClearScriptAppStudy.ViewModels
                 EditablePerson.Id = Guid.NewGuid();
                 
                 // inform the script about the saved person
-                await container.Resolve<ScriptService>().OnPersonSaved(EditablePerson);
+                await scriptService.OnPersonSaved(EditablePerson);
 
                 // fit the ui
                 Persons.Add(EditablePerson);

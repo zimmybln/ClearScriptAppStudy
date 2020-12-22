@@ -62,32 +62,32 @@
 
         <Label Grid.Row="1" Grid.Column="1" Content="Anrede" VerticalAlignment="Center" />
         <TextBox Grid.Row="1" Grid.Column="2" Height="25" Margin="2" x:Name="fieldTitle"
-                 Text="{Binding EditablePerson.Title}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
+                 Text="{Binding EditablePerson.Title, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
 
         <Label Grid.Row="2" Grid.Column="1" Content="Vorname" VerticalAlignment="Center" />
         <TextBox Grid.Row="2" Grid.Column="2" Height="25" Margin="2" x:Name="fieldFirstName" 
-                 Text="{Binding EditablePerson.FirstName}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
+                 Text="{Binding EditablePerson.FirstName, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
 
         <Label Grid.Row="3" Grid.Column="1" Content="Nachname" VerticalAlignment="Center" />
         <TextBox Grid.Row="3" Grid.Column="2" Height="25" Margin="2" x:Name="fieldLastName" 
-                 Text="{Binding EditablePerson.LastName}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
+                 Text="{Binding EditablePerson.LastName, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
 
         <Label Grid.Row="1" Grid.Column="3" Content="Strasse" VerticalAlignment="Center" />
         <TextBox Grid.Row="1" Grid.Column="4" Height="25" Margin="2" x:Name="fieldStreet"
-                 Text="{Binding EditablePerson.Street}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
+                 Text="{Binding EditablePerson.Street, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
 
         <Label Grid.Row="2" Grid.Column="3" Content="PLZ" VerticalAlignment="Center" />
         <TextBox Grid.Row="2" Grid.Column="4" Height="25" Margin="2" x:Name="fieldZipCode" 
-                 Text="{Binding EditablePerson.ZipCode}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
+                 Text="{Binding EditablePerson.ZipCode, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
 
         <Label Grid.Row="3" Grid.Column="3" Content="Stadt" VerticalAlignment="Center" />
         <TextBox Grid.Row="3" Grid.Column="4" Height="25" Margin="2" x:Name="fieldCity" 
-                 Text="{Binding EditablePerson.City}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
+                 Text="{Binding EditablePerson.City, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
 
         <Label Grid.Row="4" Grid.Column="1" Content="Notizen" VerticalAlignment="Top" />
 
         <TextBox Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3" Margin="2" AcceptsReturn="True" x:Name="fieldNotes" 
-                 Text="{Binding EditablePerson.Notes}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
+                 Text="{Binding EditablePerson.Notes, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
 
         <ListBox ItemsSource="{Binding Persons}" Grid.Row="1" Grid.Column="5" Grid.RowSpan="4" Margin="2">
             <ListBox.ItemTemplate>
