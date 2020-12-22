@@ -24,7 +24,7 @@ namespace ClearScriptAppStudy.Services
         private ApplicationScript applicationScript = null;
         private V8ScriptEngine scriptEngine = null;
         private ObservableCollection<OutputLine> outputs = new ObservableCollection<OutputLine>();
-        private object lockOutputs = new object();
+        private readonly object lockOutputs = new object();
         private bool disposedValue;
         private List<string> listOfPropertyNames;
 
@@ -55,6 +55,7 @@ namespace ClearScriptAppStudy.Services
         private void InitScript(ApplicationScript scriptSettings)
         {
             scriptEngine = new V8ScriptEngine();
+            listOfPropertyNames = new List<string>();
 
             if (!String.IsNullOrEmpty(scriptSettings.Script))
             {
@@ -75,7 +76,7 @@ namespace ClearScriptAppStudy.Services
 
                     scriptEngine.Execute(scriptSettings.Script);
 
-                    listOfPropertyNames = new List<string>(scriptEngine.Script.PropertyNames);
+                    listOfPropertyNames.AddRange(scriptEngine.Script.PropertyNames);
                 }
                 catch(Exception ex)
                 {
@@ -87,9 +88,8 @@ namespace ClearScriptAppStudy.Services
 
         public void ShowScriptDialog()
         {
-            DialogParameters dialogParameters = new DialogParameters();
+            DialogParameters dialogParameters = new DialogParameters {{nameof(Script), Script.Script}};
 
-            dialogParameters.Add(nameof(Script), Script.Script);
 
             dialogService.ShowDialog(nameof(ScriptDialogView), dialogParameters, result =>
             {
@@ -116,7 +116,7 @@ namespace ClearScriptAppStudy.Services
 
         public async Task OnNewPerson(Person person)
         {
-            if (scriptEngine != null && new List<string>(scriptEngine.Script.PropertyNames).Contains("OnNewPerson"))
+            if (scriptEngine != null && listOfPropertyNames.Contains(nameof(OnNewPerson)))
             {
                 await Task.Run(() =>
                 {
@@ -136,13 +136,13 @@ namespace ClearScriptAppStudy.Services
             }
         }
 
-        public async Task OnFieldGotFocus(Person person, string propertyName)
+        public async Task OnFieldGotFocus(object fieldInstance, string propertyName)
         {
             if (scriptEngine != null && listOfPropertyNames.Contains(nameof(OnFieldGotFocus)))
             {
                 await Task.Run(() =>
                 {
-                    scriptEngine.Script.OnFieldGotFocus(person, propertyName);
+                    scriptEngine.Script.OnFieldGotFocus(fieldInstance, propertyName);
                 });
             }
         }

@@ -23,7 +23,6 @@ namespace ClearScriptAppStudy.ViewModels
         private readonly IContainerProvider container;
         private readonly IDialogService dialogService;
         private readonly ScriptService scriptService;
-        private UIElement focusedElement;
         private ICommand showScriptDialogCommand;
         private ICommand newPersonCommand;
         private ICommand savePersonCommand;
@@ -36,9 +35,9 @@ namespace ClearScriptAppStudy.ViewModels
         private string stateInfo;
         private string fieldInfo;
         private int stateInfoTimeout = 5;
-        private DispatcherTimer stateInfoTimer;
-        private DispatcherTimer fieldInfoTimer;
-        private EventAction eventAction;
+        private readonly DispatcherTimer stateInfoTimer;
+        private readonly DispatcherTimer fieldInfoTimer;
+        private readonly EventAction eventAction;
 
 
         public MainWindowViewModel(
@@ -50,7 +49,7 @@ namespace ClearScriptAppStudy.ViewModels
             this.dialogService = dialogService;
             this.scriptService = scriptService;
 
-            eventAction = new GotFocusToScriptAction(this.scriptService);
+            eventAction = new GotFocusToScriptAction<Person>(this.scriptService);
 
             stateInfoTimer = new DispatcherTimer(new TimeSpan(0, 0, stateInfoTimeout), DispatcherPriority.Background, OnStateTimer,
                 Dispatcher.CurrentDispatcher);
