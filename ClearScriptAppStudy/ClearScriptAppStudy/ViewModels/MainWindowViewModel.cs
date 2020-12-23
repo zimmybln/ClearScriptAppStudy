@@ -46,23 +46,14 @@ namespace ClearScriptAppStudy.ViewModels
 
             GotFocusAction = new GotFocusToScriptAction<Person>(this.scriptService);
 
-            stateInfoTimer = new DispatcherTimer(new TimeSpan(0, 0, stateInfoTimeout), DispatcherPriority.Background, OnStateTimer,
-                Dispatcher.CurrentDispatcher);
-            fieldInfoTimer = new DispatcherTimer(new TimeSpan(0, 0, fieldInfoTimeout), DispatcherPriority.Background, OnFieldTimer, 
-                Dispatcher.CurrentDispatcher);
+            stateInfoTimer = new DispatcherTimer(new TimeSpan(0, 0, stateInfoTimeout), DispatcherPriority.Background, 
+                (sender, args) => StateInfo = string.Empty, Dispatcher.CurrentDispatcher);
+            fieldInfoTimer = new DispatcherTimer(new TimeSpan(0, 0, fieldInfoTimeout), DispatcherPriority.Background,
+                (sender, args) => FieldInfo = string.Empty, Dispatcher.CurrentDispatcher);
 
             persons = new ObservableCollection<Person>();
         }
 
-        private void OnFieldTimer(object? sender, EventArgs e)
-        {
-            FieldInfo = string.Empty;
-        }
-
-        private void OnStateTimer(object? sender, EventArgs e)
-        {
-            StateInfo = string.Empty;
-        }
 
         public ICommand ShowScriptDialogCommand => 
             showScriptDialogCommand ??= new DelegateCommand(OnShowScriptDialog);
@@ -128,7 +119,7 @@ namespace ClearScriptAppStudy.ViewModels
             fieldInfoTimer.Stop();
 
 
-            if (!String.IsNullOrEmpty(FieldInfo) && StateInfoTimeout > 0)
+            if (!String.IsNullOrEmpty(FieldInfo) && FieldInfoTimeout > 0)
             {
                 fieldInfoTimer.Interval = new TimeSpan(0, 0, 0, FieldInfoTimeout);
                 fieldInfoTimer.Start();

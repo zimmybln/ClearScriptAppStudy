@@ -13,6 +13,11 @@ namespace ClearScriptAppStudy.Components.Behaviors
         {
 
         }
+
+        public virtual void LostFocus(UIElement element)
+        {
+
+        }
         
         
     }

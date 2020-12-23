@@ -147,6 +147,17 @@ namespace ClearScriptAppStudy.Services
             }
         }
 
+        public async Task OnFieldLostFocus(object fieldInstance, string propertyName)
+        {
+            if (scriptEngine != null && listOfPropertyNames.Contains(nameof(OnFieldLostFocus)))
+            {
+                await Task.Run(() =>
+                {
+                    scriptEngine.Script.OnFieldLostFocus(fieldInstance, propertyName);
+                });
+            }
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)

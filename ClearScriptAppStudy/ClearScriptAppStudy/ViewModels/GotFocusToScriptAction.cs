@@ -36,6 +36,18 @@ namespace ClearScriptAppStudy.ViewModels
             }
         }
 
+        public override async void LostFocus(UIElement element)
+        {
+            object dataContext = null;
+            string propertyName = null;
+
+            if (TryToGetBindingProperties(element, ref dataContext, ref propertyName))
+            {
+                T typedContext = dataContext as T;
+                await scriptService.OnFieldLostFocus(typedContext, propertyName);
+            }
+        }
+
         private static bool TryToGetBindingProperties(UIElement element, ref object dataContext, ref string propertyName)
         {
             if (element is TextBox textBox)
