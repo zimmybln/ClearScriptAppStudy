@@ -19,20 +19,13 @@
     </Window.Resources>
     <Grid x:Name="LayoutRoot">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="30*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="70*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="40" />
+            <RowDefinition Height="*"/>
             <RowDefinition>
                 <RowDefinition.Style>
                     <Style TargetType="{x:Type RowDefinition}">
@@ -49,7 +42,7 @@
             <RowDefinition Height="25" />
         </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6">
+        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
             <MenuItem Header="Daten">
                 <MenuItem Header="Neu" InputGestureText="Strg + N" Command="{Binding NewPersonCommand}" />
                 <MenuItem Header="Speichern" Command="{Binding SavePersonCommand}"/>
@@ -60,36 +53,8 @@
             </MenuItem>
         </Menu>
 
-        <Label Grid.Row="1" Grid.Column="1" Content="Anrede" VerticalAlignment="Center" />
-        <TextBox Grid.Row="1" Grid.Column="2" Height="25" Margin="2" x:Name="fieldTitle"
-                 Text="{Binding EditablePerson.Title, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
-
-        <Label Grid.Row="2" Grid.Column="1" Content="Vorname" VerticalAlignment="Center" />
-        <TextBox Grid.Row="2" Grid.Column="2" Height="25" Margin="2" x:Name="fieldFirstName" 
-                 Text="{Binding EditablePerson.FirstName, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
-
-        <Label Grid.Row="3" Grid.Column="1" Content="Nachname" VerticalAlignment="Center" />
-        <TextBox Grid.Row="3" Grid.Column="2" Height="25" Margin="2" x:Name="fieldLastName" 
-                 Text="{Binding EditablePerson.LastName, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
-
-        <Label Grid.Row="1" Grid.Column="3" Content="Strasse" VerticalAlignment="Center" />
-        <TextBox Grid.Row="1" Grid.Column="4" Height="25" Margin="2" x:Name="fieldStreet"
-                 Text="{Binding EditablePerson.Street, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
-
-        <Label Grid.Row="2" Grid.Column="3" Content="PLZ" VerticalAlignment="Center" />
-        <TextBox Grid.Row="2" Grid.Column="4" Height="25" Margin="2" x:Name="fieldZipCode" 
-                 Text="{Binding EditablePerson.ZipCode, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
-
-        <Label Grid.Row="3" Grid.Column="3" Content="Stadt" VerticalAlignment="Center" />
-        <TextBox Grid.Row="3" Grid.Column="4" Height="25" Margin="2" x:Name="fieldCity" 
-                 Text="{Binding EditablePerson.City, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
-
-        <Label Grid.Row="4" Grid.Column="1" Content="Notizen" VerticalAlignment="Top" />
-
-        <TextBox Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="3" Margin="2" AcceptsReturn="True" x:Name="fieldNotes" 
-                 Text="{Binding EditablePerson.Notes, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
-
-        <ListBox ItemsSource="{Binding Persons}" Grid.Row="1" Grid.Column="5" Grid.RowSpan="4" Margin="2">
+        <ListBox ItemsSource="{Binding Persons}" Grid.Row="1" Grid.Column="0" Margin="2" MinWidth="50" 
+                 >
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -106,7 +71,57 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <ListBox ItemsSource="{Binding Outputs}" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="6" Height="150">
+        <GridSplitter Grid.Row="1" Grid.Column="1" Width="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                      ShowsPreview="True"/>
+
+        <TabControl Grid.Row="1" Grid.Column="2" Margin="2">
+            <TabItem Header="Allgemein">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Content="Anrede" VerticalAlignment="Center" />
+                    <TextBox Grid.Row="0" Grid.Column="1" Height="25" Margin="2" x:Name="fieldTitle"
+                        Text="{Binding EditablePerson.Title, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
+
+                    <Label Grid.Row="1" Grid.Column="0" Content="Vorname" VerticalAlignment="Center" />
+                    <TextBox Grid.Row="1" Grid.Column="1" Height="25" Margin="2" x:Name="fieldFirstName" 
+                        Text="{Binding EditablePerson.FirstName, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
+
+                    <Label Grid.Row="2" Grid.Column="0" Content="Nachname" VerticalAlignment="Center" />
+                    <TextBox Grid.Row="2" Grid.Column="1" Height="25" Margin="2" x:Name="fieldLastName" 
+                        Text="{Binding EditablePerson.LastName, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
+
+                    <Label Grid.Row="0" Grid.Column="2" Content="Strasse" VerticalAlignment="Center" />
+                    <TextBox Grid.Row="0" Grid.Column="3" Height="25" Margin="2" x:Name="fieldStreet"
+                        Text="{Binding EditablePerson.Street, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
+
+                    <Label Grid.Row="1" Grid.Column="2" Content="PLZ" VerticalAlignment="Center" />
+                    <TextBox Grid.Row="1" Grid.Column="3" Height="25" Margin="2" x:Name="fieldZipCode" 
+                        Text="{Binding EditablePerson.ZipCode, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
+
+                    <Label Grid.Row="2" Grid.Column="2" Content="Stadt" VerticalAlignment="Center" />
+                    <TextBox Grid.Row="2" Grid.Column="3" Height="25" Margin="2" x:Name="fieldCity" 
+                        Text="{Binding EditablePerson.City, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
+
+                    <Label Grid.Row="3" Grid.Column="0" Content="Notizen" VerticalAlignment="Top" />
+                    <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Margin="2" AcceptsReturn="True" x:Name="fieldNotes" 
+                        Text="{Binding EditablePerson.Notes, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <ListBox ItemsSource="{Binding Outputs}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Height="150" Margin="2">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type services:OutputLine}">
                     <Grid>
@@ -125,7 +140,7 @@
 
         </ListBox>
 
-        <StatusBar Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="6">
+        <StatusBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>

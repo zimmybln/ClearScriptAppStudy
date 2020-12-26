@@ -11,25 +11,16 @@ using System.Windows.Input;
 
 namespace ClearScriptAppStudy.Dialogs
 {
-    public class ScriptDialogViewModel : BindableBase, IDialogAware
+    public class ScriptDialogViewModel : ScriptableDialog
     {
         private ICommand dialogCommand;
-
-        public string Title => "Script";
-
-        public event Action<IDialogResult> RequestClose;
-
-        public ICommand DialogCommand => dialogCommand ??= new DelegateCommand<string>(OnCloseDialogCommand);
         
+        public ICommand DialogCommand => dialogCommand ??= new DelegateCommand<string>(OnCloseDialogCommand);
 
-        public bool CanCloseDialog()
-        {
-            return true;
-        }
 
-        public void OnDialogClosed()
+        public ScriptDialogViewModel()
         {
-            
+            this.Title = "Script";
         }
 
         private void OnCloseDialogCommand(string parameter)
@@ -46,10 +37,10 @@ namespace ClearScriptAppStudy.Dialogs
                 result = new DialogResult(ButtonResult.Cancel);
             }
 
-            RequestClose?.Invoke(result);
+            RaiseRequestClose(result);
         }
 
-        public void OnDialogOpened(IDialogParameters parameters)
+        public override void OnDialogOpened(IDialogParameters parameters)
         {
             string script = null;
 
