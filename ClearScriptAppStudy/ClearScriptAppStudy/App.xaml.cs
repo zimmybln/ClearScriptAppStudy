@@ -38,12 +38,14 @@ namespace ClearScriptAppStudy
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register(typeof(MainWindow))
+            containerRegistry
+                .Register(typeof(MainWindow))
                 .Register(typeof(MainWindowViewModel));
 
             // Dienste registrieren
-            containerRegistry.RegisterSingleton(typeof(ScriptService));
-
+            containerRegistry
+                .RegisterSingleton(typeof(ScriptService));
+            
             // Dialoge registrieren
             containerRegistry
                 .RegisterDialog<ScriptDialogView, ScriptDialogViewModel>();

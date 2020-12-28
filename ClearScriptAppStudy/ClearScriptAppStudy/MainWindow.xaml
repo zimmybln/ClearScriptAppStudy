@@ -16,6 +16,9 @@
     </Window.InputBindings>
     <Window.Resources>
         <converter:OutputTypeConverter x:Key="OutputTypeConverter" />
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="behaviors:EventBehavior.GotFocus" Value="{Binding GotFocusAction}" />
+        </Style>
     </Window.Resources>
     <Grid x:Name="LayoutRoot">
         <Grid.ColumnDefinitions>
@@ -24,7 +27,7 @@
             <ColumnDefinition Width="70*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="24"/>
             <RowDefinition Height="*"/>
             <RowDefinition>
                 <RowDefinition.Style>
@@ -43,9 +46,18 @@
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
-            <MenuItem Header="Daten">
+            <MenuItem Header="Datei">
+                <MenuItem Header="Neu" />
+                <MenuItem Header="Öffnen" Command="{Binding OpenFileCommand}" />
+                <MenuItem Header="Speichern" Command="{Binding SaveFileCommand}"/>
+                <Separator />
+                <MenuItem Header="Beenden" Command="ApplicationCommands.Close" CommandTarget="{Binding}"/>
+            </MenuItem>
+            <MenuItem Header="Datensatz">
                 <MenuItem Header="Neu" InputGestureText="Strg + N" Command="{Binding NewPersonCommand}" />
                 <MenuItem Header="Speichern" Command="{Binding SavePersonCommand}"/>
+                <Separator />
+                <MenuItem Header="Löschen" />
             </MenuItem>
             <MenuItem Header="Tools">
                 <MenuItem Header="Script" Command="{Binding ShowScriptDialogCommand}" />
@@ -58,11 +70,24 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <TextBlock ToolTip="{Binding Notes}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" ToolTip="{Binding Notes}">
                             <TextBlock.Text >
                                 <MultiBinding StringFormat="{}{1}, {0}">
                                     <Binding Path="FirstName" />
                                     <Binding Path="LastName" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock Grid.Row="1" FontSize="8">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} {1}, {2}">
+                                    <Binding Path="ZipCode" />
+                                    <Binding Path="City" />
+                                    <Binding Path="Street" />
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
@@ -92,31 +117,31 @@
 
                     <Label Grid.Row="0" Grid.Column="0" Content="Anrede" VerticalAlignment="Center" />
                     <TextBox Grid.Row="0" Grid.Column="1" Height="25" Margin="2" x:Name="fieldTitle"
-                        Text="{Binding EditablePerson.Title, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
+                        Text="{Binding EditablePerson.Title, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label Grid.Row="1" Grid.Column="0" Content="Vorname" VerticalAlignment="Center" />
                     <TextBox Grid.Row="1" Grid.Column="1" Height="25" Margin="2" x:Name="fieldFirstName" 
-                        Text="{Binding EditablePerson.FirstName, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
+                        Text="{Binding EditablePerson.FirstName, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label Grid.Row="2" Grid.Column="0" Content="Nachname" VerticalAlignment="Center" />
                     <TextBox Grid.Row="2" Grid.Column="1" Height="25" Margin="2" x:Name="fieldLastName" 
-                        Text="{Binding EditablePerson.LastName, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}" />
+                        Text="{Binding EditablePerson.LastName, UpdateSourceTrigger=PropertyChanged}"  />
 
                     <Label Grid.Row="0" Grid.Column="2" Content="Strasse" VerticalAlignment="Center" />
                     <TextBox Grid.Row="0" Grid.Column="3" Height="25" Margin="2" x:Name="fieldStreet"
-                        Text="{Binding EditablePerson.Street, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
+                        Text="{Binding EditablePerson.Street, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label Grid.Row="1" Grid.Column="2" Content="PLZ" VerticalAlignment="Center" />
                     <TextBox Grid.Row="1" Grid.Column="3" Height="25" Margin="2" x:Name="fieldZipCode" 
-                        Text="{Binding EditablePerson.ZipCode, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
+                        Text="{Binding EditablePerson.ZipCode, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label Grid.Row="2" Grid.Column="2" Content="Stadt" VerticalAlignment="Center" />
                     <TextBox Grid.Row="2" Grid.Column="3" Height="25" Margin="2" x:Name="fieldCity" 
-                        Text="{Binding EditablePerson.City, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
+                        Text="{Binding EditablePerson.City, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label Grid.Row="3" Grid.Column="0" Content="Notizen" VerticalAlignment="Top" />
                     <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Margin="2" AcceptsReturn="True" x:Name="fieldNotes" 
-                        Text="{Binding EditablePerson.Notes, UpdateSourceTrigger=PropertyChanged}" behaviors:EventBehavior.GotFocus="{Binding GotFocusAction}"/>
+                        Text="{Binding EditablePerson.Notes, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
             </TabItem>
         </TabControl>
@@ -145,9 +170,9 @@
                 <ItemsPanelTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="70*" />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="30*" />
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>

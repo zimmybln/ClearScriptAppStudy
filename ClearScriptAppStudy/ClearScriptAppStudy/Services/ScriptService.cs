@@ -18,7 +18,8 @@ using ClearScriptAppStudy.ScriptObjects;
 
 namespace ClearScriptAppStudy.Services
 {
-    public class ScriptService : BindableBase, IDisposable
+    public class ScriptService : BindableBase, IDisposable,
+                    IPersonMethods
     {
         private readonly IDialogService dialogService;
         private ApplicationScript applicationScript = null;
@@ -114,9 +115,9 @@ namespace ClearScriptAppStudy.Services
             }
         }
 
-        public async Task OnNewPerson(Person person)
+        async Task IPersonMethods.OnNewPerson(Person person)
         {
-            if (scriptEngine != null && listOfPropertyNames.Contains(nameof(OnNewPerson)))
+            if (scriptEngine != null && listOfPropertyNames.Contains(nameof(IPersonMethods.OnNewPerson)))
             {
                 await Task.Run(() =>
                 {

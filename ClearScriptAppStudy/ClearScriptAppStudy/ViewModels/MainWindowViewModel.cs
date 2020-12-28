@@ -8,8 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -22,14 +24,19 @@ namespace ClearScriptAppStudy.ViewModels
     {
         private readonly IContainerProvider container;
         private readonly ScriptService scriptService;
+        private readonly IPersonMethods personScriptMethods;
         private ICommand showScriptDialogCommand;
         private ICommand newPersonCommand;
         private ICommand savePersonCommand;
+        private ICommand newFileCommand;
+        private ICommand saveFileCommand;
+        private ICommand openFileCommand;
 
         private Person selectedPerson;
         private Person editablePerson;
         private ObservableCollection<Person> persons;
         private bool areToolsVisible = true;
+        private string fileName;
         private string stateInfo;
         private string fieldInfo;
         private int stateInfoTimeout = 5;
@@ -43,6 +50,14 @@ namespace ClearScriptAppStudy.ViewModels
         {
             this.container = container;
             this.scriptService = scriptService;
+            this.personScriptMethods = scriptService as IPersonMethods;
+            
+            CommandManager.RegisterClassCommandBinding(this.GetType(), new CommandBinding(ApplicationCommands.Close, (sender, args) => App.Current.Shutdown()));
+
+            //CommandBindings = new CommandBindingCollection
+            //{
+            //    new CommandBinding(ApplicationCommands.Close, (sender, args) => App.Current.Shutdown())
+            //};
 
             GotFocusAction = new GotFocusToScriptAction<Person>(this.scriptService);
 
@@ -63,6 +78,57 @@ namespace ClearScriptAppStudy.ViewModels
 
         public ICommand SavePersonCommand =>
             savePersonCommand ??= new DelegateCommand(OnSavePerson);
+
+        public ICommand NewFileCommand =>
+            newFileCommand ??= new DelegateCommand(OnNewFile);
+
+        public ICommand SaveFileCommand =>
+            saveFileCommand ??= new DelegateCommand(OnSaveFile);
+
+        public ICommand OpenFileCommand =>
+            openFileCommand ??= new DelegateCommand(OnOpenFile);
+        
+        public CommandBindingCollection CommandBindings { get; set; }
+
+        private void OnOpenFile()
+        {
+            fileName = @"D:\test.json";
+
+            var items = JsonSerializer.Deserialize<Person[]>(File.ReadAllText(fileName, Encoding.UTF8));
+            
+            Persons.Clear();
+
+            if (items.Any())
+            {
+                Persons.AddRange(items);
+            }
+        }
+
+        private void OnSaveFile()
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                // Datei auswählen
+                fileName = @"D:\test.json";
+            }
+
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+            };
+
+            var serializedContent = JsonSerializer.Serialize(Persons.ToArray(), options);
+            
+            if (File.Exists(fileName))
+                File.Delete(fileName);
+            
+            File.WriteAllText(fileName, serializedContent, Encoding.UTF8);
+        }
+
+        private void OnNewFile()
+        {
+            Persons.Clear();
+        }
 
         public ObservableCollection<OutputLine> Outputs => scriptService.Outputs;
 
@@ -151,7 +217,7 @@ namespace ClearScriptAppStudy.ViewModels
             var person = new Person();
 
             // Skript ausführen
-            await scriptService.OnNewPerson(person);
+            await personScriptMethods.OnNewPerson(person);
 
             // hinzufügen und auswählen
             EditablePerson = person;
