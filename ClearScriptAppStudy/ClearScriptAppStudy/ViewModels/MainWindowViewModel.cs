@@ -54,11 +54,6 @@ namespace ClearScriptAppStudy.ViewModels
             
             CommandManager.RegisterClassCommandBinding(this.GetType(), new CommandBinding(ApplicationCommands.Close, (sender, args) => App.Current.Shutdown()));
 
-            //CommandBindings = new CommandBindingCollection
-            //{
-            //    new CommandBinding(ApplicationCommands.Close, (sender, args) => App.Current.Shutdown())
-            //};
-
             GotFocusAction = new GotFocusToScriptAction<Person>(this.scriptService);
 
             stateInfoTimer = new DispatcherTimer(new TimeSpan(0, 0, stateInfoTimeout), DispatcherPriority.Background, 
@@ -141,7 +136,12 @@ namespace ClearScriptAppStudy.ViewModels
         public Person SelectedPerson
         {
             get => selectedPerson;
-            set => SetProperty(ref selectedPerson, value);
+            set => SetProperty(ref selectedPerson, value, OnSelectedPersonChanged);
+        }
+
+        private void OnSelectedPersonChanged()
+        {
+            EditablePerson = SelectedPerson;
         }
 
         public Person EditablePerson
@@ -219,6 +219,8 @@ namespace ClearScriptAppStudy.ViewModels
             // Skript ausführen
             await personScriptMethods.OnNewPerson(person);
 
+            SelectedPerson = null;
+            
             // hinzufügen und auswählen
             EditablePerson = person;
         }
@@ -227,16 +229,21 @@ namespace ClearScriptAppStudy.ViewModels
         {
             if (EditablePerson != null)
             {
-                // save the person here
-                EditablePerson.Id = Guid.NewGuid();
+                if (EditablePerson.Id.Equals(Guid.Empty))
+                {
+                    EditablePerson.Id = Guid.NewGuid();
+                    Persons.Add(EditablePerson);
+                    SelectedPerson = EditablePerson;
+                }
+                else
+                {
+                    // when the person has got already an id, we don't need
+                    // to do something here
+                }
                 
                 // inform the script about the saved person
                 await scriptService.OnPersonSaved(EditablePerson);
 
-                // fit the ui
-                Persons.Add(EditablePerson);
-                SelectedPerson = EditablePerson;
-                EditablePerson = null;
             }
         }
     }

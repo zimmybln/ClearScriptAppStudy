@@ -16,6 +16,7 @@
     </Window.InputBindings>
     <Window.Resources>
         <converter:OutputTypeConverter x:Key="OutputTypeConverter" />
+        <converter:HeaderConverter x:Key="HeaderConverter" DefaultValue="Allgemein"/>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="behaviors:EventBehavior.GotFocus" Value="{Binding GotFocusAction}" />
         </Style>
@@ -65,7 +66,7 @@
             </MenuItem>
         </Menu>
 
-        <ListBox ItemsSource="{Binding Persons}" Grid.Row="1" Grid.Column="0" Margin="2" MinWidth="50" 
+        <ListBox ItemsSource="{Binding Persons}" SelectedItem="{Binding SelectedPerson}" Grid.Row="1" Grid.Column="0" Margin="2" MinWidth="50" 
                  >
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -100,7 +101,7 @@
                       ShowsPreview="True"/>
 
         <TabControl Grid.Row="1" Grid.Column="2" Margin="2">
-            <TabItem Header="Allgemein">
+            <TabItem Header="{Binding EditablePerson, Converter={StaticResource HeaderConverter}}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
