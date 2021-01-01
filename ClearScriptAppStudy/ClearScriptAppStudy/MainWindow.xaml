@@ -9,7 +9,8 @@
         Title="MainWindow"
         x:Name="Name"
         Width="840" Height="680"
-        DataContext="{components:DataContextConnector Type={x:Type viewmodels:MainWindowViewModel}}">
+        DataContext="{components:DataContextConnector Type={x:Type viewmodels:MainWindowViewModel}}"
+        behaviors:EventBehavior.Activated="{Binding ActivatedAction}">
     <Window.InputBindings>
         <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SavePersonCommand}" />
         <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding NewPersonCommand}" />

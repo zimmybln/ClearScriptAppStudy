@@ -31,11 +31,13 @@ namespace ClearScriptAppStudy.ViewModels
         private ICommand newFileCommand;
         private ICommand saveFileCommand;
         private ICommand openFileCommand;
+        private ICommand loadedCommand;
 
         private Person selectedPerson;
         private Person editablePerson;
         private ObservableCollection<Person> persons;
         private bool areToolsVisible = true;
+        private bool isLoaded = false;
         private string fileName;
         private string stateInfo;
         private string fieldInfo;
@@ -52,9 +54,10 @@ namespace ClearScriptAppStudy.ViewModels
             this.scriptService = scriptService;
             this.personScriptMethods = scriptService as IPersonMethods;
             
-            CommandManager.RegisterClassCommandBinding(this.GetType(), new CommandBinding(ApplicationCommands.Close, (sender, args) => App.Current.Shutdown()));
-
             GotFocusAction = new GotFocusToScriptAction<Person>(this.scriptService);
+            ActivatedAction = new EventAction() {FirstTimeActivatedAction = OnNewPerson};
+            
+            
 
             stateInfoTimer = new DispatcherTimer(new TimeSpan(0, 0, stateInfoTimeout), DispatcherPriority.Background, 
                 (sender, args) => StateInfo = string.Empty, Dispatcher.CurrentDispatcher);
@@ -62,6 +65,7 @@ namespace ClearScriptAppStudy.ViewModels
                 (sender, args) => FieldInfo = string.Empty, Dispatcher.CurrentDispatcher);
 
             persons = new ObservableCollection<Person>();
+            
         }
 
 
@@ -82,8 +86,14 @@ namespace ClearScriptAppStudy.ViewModels
 
         public ICommand OpenFileCommand =>
             openFileCommand ??= new DelegateCommand(OnOpenFile);
-        
-        public CommandBindingCollection CommandBindings { get; set; }
+
+        public ICommand LoadedCommand =>
+            loadedCommand ??= new DelegateCommand(OnLoaded);
+
+        private void OnLoaded()
+        {
+            OnNewPerson();
+        }
 
         private void OnOpenFile()
         {
@@ -193,6 +203,9 @@ namespace ClearScriptAppStudy.ViewModels
         }
 
         public EventAction GotFocusAction { get; }
+        
+        
+        public EventAction ActivatedAction { get; }
 
 
         public int StateInfoTimeout

@@ -7,8 +7,25 @@ using System.Windows;
 
 namespace ClearScriptAppStudy.Components.Behaviors
 {
-    public abstract class EventAction
+    public class EventAction
     {
+        private bool isActivated = false;
+        
+        
+        public virtual void Activated()
+        {
+            if (!isActivated)
+            {
+                isActivated = true;
+                FirstTimeActivated();
+            }
+        }
+
+        public virtual void FirstTimeActivated()
+        {
+            FirstTimeActivatedAction?.Invoke();
+        }
+        
         public virtual void GotFocus(UIElement element)
         {
 
@@ -18,6 +35,13 @@ namespace ClearScriptAppStudy.Components.Behaviors
         {
 
         }
+
+        public virtual void Loaded(Window window)
+        {
+
+        }
+        
+        public Action FirstTimeActivatedAction { get; set; }
         
         
     }

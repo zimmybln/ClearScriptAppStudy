@@ -25,14 +25,10 @@ namespace ClearScriptAppStudy
         protected override void OnStartup(StartupEventArgs e)
         {
             EventManager.RegisterClassHandler(typeof(TextBox), TextBox.GotFocusEvent, new RoutedEventHandler(OnTextBoxGotFocus));
-
-
-
+            
             base.OnStartup(e);
 
-            var settingsScript = new SettingsManager<ApplicationScript>("ClearScriptAppStudy.json");
 
-            this.Container.Resolve<ScriptService>().Script = settingsScript.LoadSettings();
 
         }
 
@@ -62,6 +58,10 @@ namespace ClearScriptAppStudy
 
         protected override void InitializeShell(Window shell)
         {
+            var settingsScript = new SettingsManager<ApplicationScript>("ClearScriptAppStudy.json");
+
+            this.Container.Resolve<ScriptService>().Script = settingsScript.LoadSettings();
+            
             base.InitializeShell(shell);
 
             App.Current.MainWindow = shell;
