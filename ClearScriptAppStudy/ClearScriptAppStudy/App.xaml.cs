@@ -29,9 +29,6 @@ namespace ClearScriptAppStudy
             EventManager.RegisterClassHandler(typeof(TextBox), TextBox.GotFocusEvent, new RoutedEventHandler(OnTextBoxGotFocus));
             
             base.OnStartup(e);
-
-
-
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -63,8 +60,9 @@ namespace ClearScriptAppStudy
         {
             base.ConfigureViewModelLocator();
 
-
-            ViewModelLocationProvider.SetDefaultViewModelFactory(t => this.Container.Resolve(t));
+           
+    
+    
         }
 
         protected override Window CreateShell()
