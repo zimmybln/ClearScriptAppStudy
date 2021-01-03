@@ -24,7 +24,7 @@ namespace ClearScriptAppStudy.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private readonly IContainerProvider container;
-        private readonly ScriptService scriptService;
+        private readonly IScriptDialogs scriptService;
         private readonly IPersonMethods personScriptMethods;
         private ICommand showScriptDialogCommand;
         private ICommand newPersonCommand;
@@ -50,13 +50,15 @@ namespace ClearScriptAppStudy.ViewModels
 
         public MainWindowViewModel(
                 IContainerProvider container,
-                ScriptService scriptService)
+                IScriptDialogs scriptService,
+                IPersonMethods personMethods,
+                IFieldMethods fieldMethods)
         {
             this.container = container;
             this.scriptService = scriptService;
             this.personScriptMethods = scriptService as IPersonMethods;
             
-            GotFocusAction = new GotFocusToScriptAction<Person>(this.scriptService);
+            GotFocusAction = new GotFocusToScriptAction<Person>(fieldMethods);
             ActivatedAction = new EventAction() {FirstTimeActivatedAction = OnNewPerson};
             
             
@@ -318,7 +320,7 @@ namespace ClearScriptAppStudy.ViewModels
                 }
                 
                 // inform the script about the saved person
-                await scriptService.OnPersonSaved(EditablePerson);
+                await personScriptMethods.OnPersonSaved(EditablePerson);
 
             }
         }

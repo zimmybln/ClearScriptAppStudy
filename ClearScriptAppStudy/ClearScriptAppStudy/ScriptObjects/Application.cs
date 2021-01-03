@@ -18,6 +18,9 @@ namespace ClearScriptAppStudy.ScriptObjects
             get => ((MainWindowViewModel)System.Windows.Application.Current.MainWindow.DataContext).StateInfo;
             set
             {
+                if (System.Windows.Application.Current.MainWindow.DataContext == null)
+                    return;
+                
                 if (System.Windows.Application.Current.Dispatcher.CheckAccess())
                 {
                     ((MainWindowViewModel)System.Windows.Application.Current.MainWindow.DataContext).StateInfo = value;

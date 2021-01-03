@@ -19,7 +19,9 @@ using ClearScriptAppStudy.ScriptObjects;
 namespace ClearScriptAppStudy.Services
 {
     public class ScriptService : BindableBase, IDisposable,
-                    IPersonMethods
+                    IScriptDialogs,
+                    IPersonMethods,
+                    IFieldMethods
     {
         private readonly IDialogService dialogService;
         private ApplicationScript applicationScript = null;
@@ -126,9 +128,9 @@ namespace ClearScriptAppStudy.Services
             }
         }
 
-        public async Task OnPersonSaved(Person person)
+        async Task IPersonMethods.OnPersonSaved(Person person)
         {
-            if (scriptEngine != null && listOfPropertyNames.Contains(nameof(OnPersonSaved)))
+            if (scriptEngine != null && listOfPropertyNames.Contains(nameof(IPersonMethods.OnPersonSaved)))
             {
                 await Task.Run(() =>
                 {
@@ -137,9 +139,9 @@ namespace ClearScriptAppStudy.Services
             }
         }
 
-        public async Task OnFieldGotFocus(object fieldInstance, string propertyName)
+        async Task IFieldMethods.OnFieldGotFocus(object fieldInstance, string propertyName)
         {
-            if (scriptEngine != null && listOfPropertyNames.Contains(nameof(OnFieldGotFocus)))
+            if (scriptEngine != null && listOfPropertyNames.Contains(nameof(IFieldMethods.OnFieldGotFocus)))
             {
                 await Task.Run(() =>
                 {
@@ -148,9 +150,9 @@ namespace ClearScriptAppStudy.Services
             }
         }
 
-        public async Task OnFieldLostFocus(object fieldInstance, string propertyName)
+        async Task IFieldMethods.OnFieldLostFocus(object fieldInstance, string propertyName)
         {
-            if (scriptEngine != null && listOfPropertyNames.Contains(nameof(OnFieldLostFocus)))
+            if (scriptEngine != null && listOfPropertyNames.Contains(nameof(IFieldMethods.OnFieldLostFocus)))
             {
                 await Task.Run(() =>
                 {

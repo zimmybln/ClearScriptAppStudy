@@ -10,5 +10,7 @@ namespace ClearScriptAppStudy.Services
     public interface IPersonMethods
     {
         Task OnNewPerson(Person person);
+
+        Task OnPersonSaved(Person person);
     }
 }

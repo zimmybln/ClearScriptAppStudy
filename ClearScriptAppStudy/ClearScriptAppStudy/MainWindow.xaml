@@ -6,11 +6,13 @@
         xmlns:services="clr-namespace:ClearScriptAppStudy.Services"
         xmlns:behaviors="clr-namespace:ClearScriptAppStudy.Components.Behaviors"
         xmlns:converter="clr-namespace:ClearScriptAppStudy.Components.Converter"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
         Title="{Binding Title}"
         x:Name="Name"
         Width="840" Height="680"
-        DataContext="{components:DataContextConnector Type={x:Type viewmodels:MainWindowViewModel}}"
-        behaviors:EventBehavior.Activated="{Binding ActivatedAction}">
+        behaviors:EventBehavior.Activated="{Binding ActivatedAction}"
+        >
     <Window.InputBindings>
         <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SavePersonCommand}" />
         <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding NewPersonCommand}" />

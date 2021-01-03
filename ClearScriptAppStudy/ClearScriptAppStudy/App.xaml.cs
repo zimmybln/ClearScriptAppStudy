@@ -7,6 +7,7 @@ using Prism.Ioc;
 using Prism.Unity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Configuration;
 using System.Data;
 using System.Linq;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Prism.Mvvm;
 
 namespace ClearScriptAppStudy
 {
@@ -34,14 +36,20 @@ namespace ClearScriptAppStudy
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            
+            
+            
             containerRegistry
                 .Register(typeof(MainWindow))
                 .Register(typeof(MainWindowViewModel));
 
             // Dienste registrieren
             containerRegistry
-                .RegisterSingleton(typeof(ScriptService));
-            
+                .RegisterSingleton(typeof(ScriptService))
+                .Register<IScriptDialogs>(container => container.Resolve<ScriptService>())
+                .Register<IPersonMethods>(container => container.Resolve<ScriptService>())
+                .Register<IFieldMethods>(container => container.Resolve<ScriptService>());
+                
             // Dialoge registrieren
             containerRegistry
                 .RegisterDialog<ScriptDialogView, ScriptDialogViewModel>();
@@ -51,6 +59,14 @@ namespace ClearScriptAppStudy
 
         }
 
+        protected override void ConfigureViewModelLocator()
+        {
+            base.ConfigureViewModelLocator();
+
+
+            ViewModelLocationProvider.SetDefaultViewModelFactory(t => this.Container.Resolve(t));
+        }
+
         protected override Window CreateShell()
         {
             return this.Container.Resolve<MainWindow>();
@@ -58,9 +74,11 @@ namespace ClearScriptAppStudy
 
         protected override void InitializeShell(Window shell)
         {
+            shell.DataContext = Container.Resolve(typeof(MainWindowViewModel));
+            
             var settingsScript = new SettingsManager<ApplicationScript>("ClearScriptAppStudy.json");
 
-            this.Container.Resolve<ScriptService>().Script = settingsScript.LoadSettings();
+            this.Container.Resolve<IScriptDialogs>().Script = settingsScript.LoadSettings();
             
             base.InitializeShell(shell);
 
@@ -78,7 +96,7 @@ namespace ClearScriptAppStudy
 
             var settingsManager = new SettingsManager<ApplicationScript>("ClearScriptAppStudy.json");
 
-            settingsManager.SaveSettings(this.Container.Resolve<ScriptService>().Script);
+            settingsManager.SaveSettings(this.Container.Resolve<IScriptDialogs>().Script);
 
             base.OnExit(e);
         }

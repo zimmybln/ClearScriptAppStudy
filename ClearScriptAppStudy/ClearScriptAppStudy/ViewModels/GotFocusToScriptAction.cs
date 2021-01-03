@@ -17,9 +17,9 @@ namespace ClearScriptAppStudy.ViewModels
     public class GotFocusToScriptAction<T> : EventAction
         where T: class
     {
-        private readonly ScriptService scriptService;
+        private readonly IFieldMethods scriptService;
 
-        public GotFocusToScriptAction(ScriptService scriptService)
+        public GotFocusToScriptAction(IFieldMethods scriptService)
         {
             this.scriptService = scriptService;
         }
