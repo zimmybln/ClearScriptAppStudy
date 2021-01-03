@@ -17,6 +17,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ClearScriptAppStudy.Components.Behaviors;
+using Microsoft.Win32;
 
 namespace ClearScriptAppStudy.ViewModels
 {
@@ -31,7 +32,7 @@ namespace ClearScriptAppStudy.ViewModels
         private ICommand newFileCommand;
         private ICommand saveFileCommand;
         private ICommand openFileCommand;
-        private ICommand loadedCommand;
+        private ICommand closeCommand;
 
         private Person selectedPerson;
         private Person editablePerson;
@@ -41,6 +42,7 @@ namespace ClearScriptAppStudy.ViewModels
         private string fileName;
         private string stateInfo;
         private string fieldInfo;
+        private string title;
         private int stateInfoTimeout = 5;
         private int fieldInfoTimeout = 10;
         private readonly DispatcherTimer stateInfoTimer;
@@ -66,6 +68,8 @@ namespace ClearScriptAppStudy.ViewModels
 
             persons = new ObservableCollection<Person>();
             
+            ApplyTitle();
+            
         }
 
 
@@ -87,26 +91,53 @@ namespace ClearScriptAppStudy.ViewModels
         public ICommand OpenFileCommand =>
             openFileCommand ??= new DelegateCommand(OnOpenFile);
 
-        public ICommand LoadedCommand =>
-            loadedCommand ??= new DelegateCommand(OnLoaded);
+        public ICommand CloseCommand =>
+            closeCommand ??= new DelegateCommand(OnClose);
 
-        private void OnLoaded()
+        private void OnClose()
         {
-            OnNewPerson();
+            Application.Current.Shutdown();            
         }
 
         private void OnOpenFile()
         {
-            fileName = @"D:\test.json";
-
-            var items = JsonSerializer.Deserialize<Person[]>(File.ReadAllText(fileName, Encoding.UTF8));
-            
-            Persons.Clear();
-
-            if (items.Any())
+            var openFileDialog = new OpenFileDialog()
             {
-                Persons.AddRange(items);
+                Title = "Datei öffnen",
+                Filter = "Json |*.json|Alle Dateien|*.*",
+                FilterIndex = 0,
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            };
+
+            if (openFileDialog.ShowDialog(App.Current.MainWindow) != true)
+                return;
+
+            fileName = openFileDialog.FileName;
+
+            try
+            {
+                Persons.Clear();
+
+                var items = JsonSerializer.Deserialize<Person[]>(File.ReadAllText(fileName, Encoding.UTF8));
+
+                if (items != null && items.Any())
+                {
+                    Persons.AddRange(items);
+
+                    if (Persons.Any())
+                    {
+                        SelectedPerson = Persons[0];
+                    }
+                }
+                
+                ApplyTitle(fileName);
             }
+            catch (Exception e)
+            {
+
+
+            }
+
         }
 
         private void OnSaveFile()
@@ -114,7 +145,19 @@ namespace ClearScriptAppStudy.ViewModels
             if (string.IsNullOrEmpty(fileName))
             {
                 // Datei auswählen
-                fileName = @"D:\test.json";
+                var saveFileDialog = new SaveFileDialog()
+                {
+                    Title = "Datei speichern",
+                    Filter = "Json |*.json|Alle Dateien|*.*",
+                    FilterIndex = 0,
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    OverwritePrompt = true
+                };
+
+                if (!saveFileDialog.ShowDialog() == true)
+                    return;
+
+                fileName = saveFileDialog.FileName;
             }
 
             var options = new JsonSerializerOptions
@@ -128,6 +171,8 @@ namespace ClearScriptAppStudy.ViewModels
                 File.Delete(fileName);
             
             File.WriteAllText(fileName, serializedContent, Encoding.UTF8);
+            
+            ApplyTitle(fileName);
         }
 
         private void OnNewFile()
@@ -164,6 +209,12 @@ namespace ClearScriptAppStudy.ViewModels
         {
             get => areToolsVisible;
             set => SetProperty(ref areToolsVisible, value);
+        }
+
+        public string Title
+        {
+            get => title;
+            set => SetProperty(ref title, value);
         }
 
         public string StateInfo
@@ -218,6 +269,18 @@ namespace ClearScriptAppStudy.ViewModels
         {
             get => fieldInfoTimeout;
             set => SetProperty(ref fieldInfoTimeout, value);
+        }
+
+        private void ApplyTitle(string fileName = null)
+        {
+            if (!String.IsNullOrEmpty(fileName))
+            {
+                Title = $"Automation Study [{Path.GetFileName(fileName)}]";
+            }
+            else
+            {
+                Title = $"Automation Study";
+            }
         }
 
         private void OnShowScriptDialog()

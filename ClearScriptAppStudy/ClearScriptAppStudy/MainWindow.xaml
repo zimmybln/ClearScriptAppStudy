@@ -6,7 +6,7 @@
         xmlns:services="clr-namespace:ClearScriptAppStudy.Services"
         xmlns:behaviors="clr-namespace:ClearScriptAppStudy.Components.Behaviors"
         xmlns:converter="clr-namespace:ClearScriptAppStudy.Components.Converter"
-        Title="MainWindow"
+        Title="{Binding Title}"
         x:Name="Name"
         Width="840" Height="680"
         DataContext="{components:DataContextConnector Type={x:Type viewmodels:MainWindowViewModel}}"
@@ -53,7 +53,7 @@
                 <MenuItem Header="Öffnen" Command="{Binding OpenFileCommand}" />
                 <MenuItem Header="Speichern" Command="{Binding SaveFileCommand}"/>
                 <Separator />
-                <MenuItem Header="Beenden" Command="ApplicationCommands.Close" CommandTarget="{Binding}"/>
+                <MenuItem Header="Beenden" Command="{Binding CloseCommand}" />
             </MenuItem>
             <MenuItem Header="Datensatz">
                 <MenuItem Header="Neu" InputGestureText="Strg + N" Command="{Binding NewPersonCommand}" />
