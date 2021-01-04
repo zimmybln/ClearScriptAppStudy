@@ -7,6 +7,7 @@ using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -204,7 +205,17 @@ namespace ClearScriptAppStudy.ViewModels
         public Person EditablePerson
         {
             get => editablePerson;
-            set => SetProperty(ref editablePerson, value);
+            set => SetProperty(ref editablePerson, value, OnEditablePersonChanged);
+        }
+
+        private void OnEditablePersonChanged()
+        {
+            EditablePerson.PropertyChanged += OnEditablePersonPropertyChanged;
+        }
+
+        private void OnEditablePersonPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            Debug.WriteLine($"Eigenschaft {e.PropertyName} hat sich geändert");
         }
 
         public bool AreToolsVisible

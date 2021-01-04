@@ -12,7 +12,7 @@ namespace ClearScriptAppStudy.Components.Converter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return string.Equals(value.ToString(), parameter);
+            return string.Equals(value?.ToString(), parameter);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
