@@ -20,6 +20,7 @@ namespace ClearScriptAppStudy.Types
         private string zipCode;
         private string notes;
         private Guid id = Guid.Empty;
+        private string activeField;
 
         public Person()
         {
@@ -133,6 +134,17 @@ namespace ClearScriptAppStudy.Types
                     notes = value;
                     RaisePropertyChanged();
                 }
+            }
+        }
+
+        public string ActiveField
+        {
+            get => activeField;
+            set
+            {
+                activeField = value;
+                RaisePropertyChanged();
+
             }
         }
 

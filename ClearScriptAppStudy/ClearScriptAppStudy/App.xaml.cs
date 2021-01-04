@@ -56,24 +56,18 @@ namespace ClearScriptAppStudy
 
         }
 
-        protected override void ConfigureViewModelLocator()
-        {
-            base.ConfigureViewModelLocator();
-
-           
-    
-    
-        }
-
         protected override Window CreateShell()
         {
-            return this.Container.Resolve<MainWindow>();
+            var window = this.Container.Resolve<MainWindow>();
+
+            window.DataContext = Container.Resolve(typeof(MainWindowViewModel));
+
+            return window;
+
         }
 
         protected override void InitializeShell(Window shell)
         {
-            shell.DataContext = Container.Resolve(typeof(MainWindowViewModel));
-            
             var settingsScript = new SettingsManager<ApplicationScript>("ClearScriptAppStudy.json");
 
             this.Container.Resolve<IScriptDialogs>().Script = settingsScript.LoadSettings();
@@ -82,11 +76,6 @@ namespace ClearScriptAppStudy
 
             App.Current.MainWindow = shell;
             App.Current.MainWindow.Show();
-        }
-
-        protected override void Initialize()
-        {
-            base.Initialize();
         }
 
         protected override void OnExit(ExitEventArgs e)

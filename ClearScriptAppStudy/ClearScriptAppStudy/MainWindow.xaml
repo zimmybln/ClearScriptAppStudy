@@ -19,6 +19,7 @@
     </Window.InputBindings>
     <Window.Resources>
         <converter:OutputTypeConverter x:Key="OutputTypeConverter" />
+        <converter:FieldToFocusConverter x:Key="FieldToFocusConverter" />
         <converter:HeaderConverter x:Key="HeaderConverter" DefaultValue="Allgemein"/>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="behaviors:EventBehavior.GotFocus" Value="{Binding GotFocusAction}" />
@@ -121,15 +122,19 @@
 
                     <Label Grid.Row="0" Grid.Column="0" Content="Anrede" VerticalAlignment="Center" />
                     <TextBox Grid.Row="0" Grid.Column="1" Height="25" Margin="2" x:Name="fieldTitle"
-                        Text="{Binding EditablePerson.Title, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding EditablePerson.Title, UpdateSourceTrigger=PropertyChanged}" 
+                             behaviors:DataBehavior.IsFocused="{Binding EditablePerson.ActiveField, Converter={StaticResource FieldToFocusConverter}, ConverterParameter=Title}"/>
 
                     <Label Grid.Row="1" Grid.Column="0" Content="Vorname" VerticalAlignment="Center" />
                     <TextBox Grid.Row="1" Grid.Column="1" Height="25" Margin="2" x:Name="fieldFirstName" 
-                        Text="{Binding EditablePerson.FirstName, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding EditablePerson.FirstName, UpdateSourceTrigger=PropertyChanged}" 
+                             
+                             behaviors:DataBehavior.IsFocused="{Binding EditablePerson.ActiveField, Converter={StaticResource FieldToFocusConverter}, ConverterParameter=FirstName}"/>
 
                     <Label Grid.Row="2" Grid.Column="0" Content="Nachname" VerticalAlignment="Center" />
                     <TextBox Grid.Row="2" Grid.Column="1" Height="25" Margin="2" x:Name="fieldLastName" 
-                        Text="{Binding EditablePerson.LastName, UpdateSourceTrigger=PropertyChanged}"  />
+                        Text="{Binding EditablePerson.LastName, UpdateSourceTrigger=PropertyChanged}" 
+                             behaviors:DataBehavior.IsFocused="{Binding EditablePerson.ActiveField, Converter={StaticResource FieldToFocusConverter}, ConverterParameter=LastName}"/>
 
                     <Label Grid.Row="0" Grid.Column="2" Content="Strasse" VerticalAlignment="Center" />
                     <TextBox Grid.Row="0" Grid.Column="3" Height="25" Margin="2" x:Name="fieldStreet"
