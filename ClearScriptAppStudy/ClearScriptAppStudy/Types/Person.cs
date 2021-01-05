@@ -137,15 +137,9 @@ namespace ClearScriptAppStudy.Types
             }
         }
 
-        public string ActiveField
+        public void ActivateField(string fieldName)
         {
-            get => activeField;
-            set
-            {
-                activeField = value;
-                RaisePropertyChanged();
-
-            }
+            RaisePropertyChanged(fieldName);
         }
 
 

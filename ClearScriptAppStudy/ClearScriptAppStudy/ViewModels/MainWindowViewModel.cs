@@ -205,12 +205,7 @@ namespace ClearScriptAppStudy.ViewModels
         public Person EditablePerson
         {
             get => editablePerson;
-            set => SetProperty(ref editablePerson, value, OnEditablePersonChanged);
-        }
-
-        private void OnEditablePersonChanged()
-        {
-            EditablePerson.PropertyChanged += OnEditablePersonPropertyChanged;
+            set => SetProperty(ref editablePerson, value);
         }
 
         private void OnEditablePersonPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -303,7 +298,14 @@ namespace ClearScriptAppStudy.ViewModels
 
         private async void OnNewPerson()
         {
+            if (EditablePerson != null)
+            {
+                EditablePerson.PropertyChanged -= OnEditablePersonPropertyChanged;
+            }
+            
             var person = new Person();
+
+            person.PropertyChanged += OnEditablePersonPropertyChanged;
 
             // Skript ausführen
             await personScriptMethods.OnNewPerson(person);

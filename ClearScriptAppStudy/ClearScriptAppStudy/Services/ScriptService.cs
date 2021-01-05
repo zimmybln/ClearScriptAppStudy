@@ -123,7 +123,15 @@ namespace ClearScriptAppStudy.Services
             {
                 await Task.Run(() =>
                 {
-                    scriptEngine.Script.OnNewPerson(person);
+                    try
+                    {
+                        scriptEngine.Script.OnNewPerson(person);
+                    }
+                    catch(Exception ex)
+                    {
+                        OnWriteLine(ex.Message, OutputTypes.Error);
+                    }
+                    
                 });
             }
         }
@@ -134,7 +142,15 @@ namespace ClearScriptAppStudy.Services
             {
                 await Task.Run(() =>
                 {
-                    scriptEngine.Script.OnPersonSaved(person);
+                    try
+                    {
+                        scriptEngine.Script.OnPersonSaved(person);
+                    }
+                    catch(Exception ex)
+                    {
+                        OnWriteLine(ex.Message, OutputTypes.Error);
+                    }
+                    
                 });
             }
         }
@@ -145,7 +161,14 @@ namespace ClearScriptAppStudy.Services
             {
                 await Task.Run(() =>
                 {
-                    scriptEngine.Script.OnFieldGotFocus(fieldInstance, propertyName);
+                    try
+                    {
+                        scriptEngine.Script.OnFieldGotFocus(fieldInstance, propertyName);
+                    }
+                    catch (Exception ex)
+                    {
+                        OnWriteLine(ex.Message, OutputTypes.Error);
+                    }
                 });
             }
         }
@@ -156,7 +179,15 @@ namespace ClearScriptAppStudy.Services
             {
                 await Task.Run(() =>
                 {
-                    scriptEngine.Script.OnFieldLostFocus(fieldInstance, propertyName);
+                    try
+                    {
+                        scriptEngine.Script.OnFieldLostFocus(fieldInstance, propertyName);
+                    }
+                    catch (Exception ex)
+                    {
+                        OnWriteLine(ex.Message, OutputTypes.Error);
+                    }
+
                 });
             }
         }
